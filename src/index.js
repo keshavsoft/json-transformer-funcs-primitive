@@ -1,4 +1,2 @@
-import applyTemplate from "./applyTemplate/index.js";
-
-export default applyTemplate;
-export { applyTemplate };
+export * from "./v2/index.js";
+export { default } from "./v2/index.js";
