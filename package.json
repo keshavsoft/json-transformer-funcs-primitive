@@ -1,6 +1,6 @@
 {
   "name": "json-transformer-funcs-primitive",
-  "version": "1.2.1",
+  "version": "1.3.1",
   "description": "Primitive template interpolation engine for json-transformer-funcs",
   "main": "./src/index.js",
   "module": "./src/index.js",
@@ -13,7 +13,6 @@
   },
   "files": [
     "src",
-    "index.js",
     "README.md"
   ],
   "repository": {
