@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Token Reference — json-transformer-funcs-primitive</title>
+  <link rel="stylesheet" href="../style.css">
+  <script src="../script.js" defer></script>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <a href="../index.html" class="brand-title">
+          <span class="brand-logo">⚛️</span>
+          <span>primitive</span>
+          <span class="brand-badge">v1.9.0</span>
+        </a>
+        <div class="brand-subtitle">Token Reference</div>
+      </div>
+
+      <div class="nav-hub">
+        <a href="playground.html"><span>🧪</span> <span>Live Sandbox &amp; Tree</span></a>
+      </div>
+
+      <div class="nav-label">Documentation</div>
+      <ul class="nav-list">
+        <li><a href="../index.html" class="nav-link">📖 The Story</a></li>
+        <li><a href="index.html" class="nav-link">📘 User Guide</a></li>
+        <li><a href="global-registry.html" class="nav-link">🌳 Global Registry <span class="nav-tag">v1.9</span></a></li>
+        <li><a href="tokens.html" class="nav-link active">🔤 Token Reference</a></li>
+        <li><a href="examples.html" class="nav-link">🍳 Enterprise Cookbook</a></li>
+        <li><a href="playground.html" class="nav-link">🧪 Live Sandbox</a></li>
+      </ul>
+
+      <div class="nav-label">Architecture</div>
+      <ul class="nav-list">
+        <li><a href="../developer/index.html" class="nav-link">🛠️ Developer Internals</a></li>
+      </ul>
+
+      <div class="sidebar-footer">
+        Part of the <a href="https://github.com/keshavsoft" target="_blank">KeshavSoft</a> Ecosystem &bull; MIT
+      </div>
+    </aside>
+
+    <main class="content">
+      <div class="hero">
+        <div class="hero-meta">
+          <span class="hero-tag">🔤 Syntax &amp; Rules</span>
+          <span class="badge">Reference</span>
+        </div>
+        <h1>Token <span class="gradient-text">Reference</span></h1>
+        <div class="lead">
+          Comprehensive guide to standard placeholders, multi-token combinations, and built-in typed special tokens.
+        </div>
+      </div>
+
+      <!-- SECTION 1: STANDARD TOKENS -->
+      <h2>1. Standard Tokens: <code>${key}</code></h2>
+      <p>
+        The engine scans string attributes and textContent using the regular expression <code>/\$\{(\w+)\}/g</code>.
+        Whenever a key inside <code>${key}</code> is defined in the data dictionary (<code>inElement[key] !== undefined</code>), the token is replaced with its string representation.
+      </p>
+
+      <h3>Multiple Tokens in One String</h3>
+      <p>A single attribute or text string can combine multiple tokens seamlessly:</p>
+      <pre><code>const data = {
+  colWidth: "col-md-6",
+  spacing: "mb-3",
+  align: "text-center"
+};
+
+const template = {
+  tagName: "div",
+  attributes: {
+    class: "${colWidth} ${spacing} ${align}"
+  }
+};
+
+const result = applyTemplate(data, template);
+// result.attributes.class === "col-md-6 mb-3 text-center"</code></pre>
+
+      <div class="note">
+        <strong>The Unmatched Token Invariant:</strong>
+        If a token does not exist in <code>inElement</code> (e.g. <code>undefined</code>), the token is left intact: <code>${unknownKey}</code>.
+        This enables progressive multi-pass transformations where upstream engines fill element tokens and downstream engines fill column/row tokens later!
+      </div>
+
+      <!-- SECTION 2: SPECIAL ENTERPRISE TOKENS -->
+      <h2>2. Special Built-in Tokens</h2>
+      <p>
+        For enterprise tables, summary cards, and aggregated counters, the engine provides two native tokens that return typed values instead of plain strings:
+      </p>
+
+      <h3>A. <code>${agg:count}</code> &bull; Numeric Aggregate Count</h3>
+      <p>
+        When a string template is exactly <code>"${agg:count}"</code> and <code>inElement.rowData</code> is an Array, the engine returns the <strong>numeric length</strong> of the array (not a string).
+      </p>
+      <pre><code>const data = {
+  rowData: ["Claim #101", "Claim #102", "Claim #105"]
+};
+
+const template = {
+  tagName: "span",
+  attributes: { class: "badge bg-info" },
+  textContent: "${agg:count}"
+};
+
+const result = applyTemplate(data, template);
+// result.textContent === 3 (typeof number)</code></pre>
+
+      <h3>B. <code>${rowValue}</code> &bull; Raw Data Pass-Through</h3>
+      <p>
+        When a string template is exactly <code>"${rowValue}"</code> and <code>inElement.rowData</code> exists, the engine returns the underlying <code>rowData</code> value directly (including objects or primitives).
+      </p>
+      <pre><code>const data = {
+  rowData: { userId: 90210, role: "Administrator", tier: "Gold" }
+};
+
+const template = "${rowValue}";
+
+const result = applyTemplate(data, template);
+// result === { userId: 90210, role: "Administrator", tier: "Gold" }</code></pre>
+
+      <!-- SECTION 3: COMPARISON -->
+      <h2>3. Comparison: Primitive vs Other Template Engines</h2>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th>json-transformer-funcs-primitive</th>
+              <th>Handlebars / Mustache</th>
+              <th>Template Literals (<code>`${}`</code>)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Format</strong></td>
+              <td>Pure JSON AST</td>
+              <td>HTML Strings</td>
+              <td>String Literals</td>
+            </tr>
+            <tr>
+              <td><strong>Runtime Footprint</strong></td>
+              <td>&lt; 2 KB (0 dependencies)</td>
+              <td>~70 KB minified</td>
+              <td>Native JS only</td>
+            </tr>
+            <tr>
+              <td><strong>XSS Risk</strong></td>
+              <td><strong>Zero</strong> (AST data only, no HTML injection)</td>
+              <td>Requires auto-escaping</td>
+              <td>High if interpolated into innerHTML</td>
+            </tr>
+            <tr>
+              <td><strong>Serialization</strong></td>
+              <td>100% JSON serializable over wire</td>
+              <td>String template only</td>
+              <td>Not serializable</td>
+            </tr>
+            <tr>
+              <td><strong>Global Tree</strong></td>
+              <td><code>window.ks.transformerFuncs.primitive</code></td>
+              <td>None</td>
+              <td>None</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="page-nav">
+        <a href="global-registry.html">&larr; Back: Global Registry</a>
+        <a href="examples.html">Next: Enterprise Cookbook &rarr;</a>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

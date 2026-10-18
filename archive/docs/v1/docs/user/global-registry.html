@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Global Registry &amp; Family Tree — json-transformer-funcs-primitive</title>
+  <link rel="stylesheet" href="../style.css">
+  <script src="../script.js" defer></script>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <a href="../index.html" class="brand-title">
+          <span class="brand-logo">⚛️</span>
+          <span>primitive</span>
+          <span class="brand-badge">v1.9.0</span>
+        </a>
+        <div class="brand-subtitle">The JSON-to-DOM Atom</div>
+      </div>
+
+      <div class="nav-hub">
+        <a href="playground.html"><span>🧪</span> <span>Live Studio &amp; Tree</span></a>
+      </div>
+
+      <div class="nav-label">Documentation</div>
+      <ul class="nav-list">
+        <li><a href="../index.html" class="nav-link">📖 The Story</a></li>
+        <li><a href="index.html" class="nav-link">📘 User Guide</a></li>
+        <li><a href="global-registry.html" class="nav-link active">🌳 Global Registry <span class="nav-tag">v1.9</span></a></li>
+        <li><a href="tokens.html" class="nav-link">🔤 Token Reference</a></li>
+        <li><a href="examples.html" class="nav-link">🍳 Enterprise Cookbook</a></li>
+        <li><a href="playground.html" class="nav-link">🧪 Live Sandbox</a></li>
+      </ul>
+
+      <div class="nav-label">Architecture</div>
+      <ul class="nav-list">
+        <li><a href="../developer/index.html" class="nav-link">🛠️ Developer Internals</a></li>
+      </ul>
+
+      <div class="sidebar-footer">
+        Part of the <a href="https://github.com/keshavsoft" target="_blank">KeshavSoft</a> Ecosystem &bull; MIT
+      </div>
+    </aside>
+
+    <main class="content">
+      <div class="hero">
+        <div class="hero-meta">
+          <span class="hero-tag">✨ New in v1.9.0</span>
+          <span class="badge">Architecture</span>
+        </div>
+        <h1>The <span class="gradient-text">window.ks</span> Family Tree</h1>
+        <div class="lead">
+          How <code>json-transformer-funcs-primitive</code> self-registers into a structured, unified namespace without global pollution.
+        </div>
+      </div>
+
+      <!-- SECTION 1: MOTIVATION -->
+      <h2>1. The Problem: Global Pollution vs Discovery</h2>
+      <p>
+        In modern enterprise frontend development, components and renderers frequently need access to data transformation functions across boundaries (e.g., microfrontends, web components, browser consoles, and legacy bundles).
+      </p>
+      <p>
+        Common anti-patterns either dump dozens of loose function names directly onto <code>window</code> (e.g. <code>window.applyTemplate</code>, <code>window.transformRow</code>, <code>window.transformTable</code>), risking collisions, or encapsulate them so heavily that external devtools and runtime pipelines cannot discover them.
+      </p>
+      <p>
+        Starting in <strong>v1.9.0</strong>, <code>json-transformer-funcs-primitive</code> introduces an elegant family-tree pattern anchored on <code>window.ks</code> (or universally <code>globalThis.ks</code>).
+      </p>
+
+      <!-- SECTION 2: THE TREE VISUALIZER -->
+      <h2>2. The KeshavSoft Transformer Hierarchy</h2>
+      <p>
+        When you import <code>json-transformer-funcs-primitive</code> in a browser or Node runtime, the module automatically maps its capabilities into three distinct access levels:
+      </p>
+
+      <div class="tree-container">
+        <div class="tree-root">
+          <span>🌐</span> globalThis.ks (window.ks)
+          <span class="tree-pill">Root Namespace</span>
+        </div>
+
+        <div class="tree-node">
+          <div class="tree-branch-title">
+            <span>⚡</span> applyTemplate(inElement, inTemplate)
+            <span class="tree-pill">Direct Shortcut</span>
+          </div>
+          <div class="tree-desc">
+            Convenient top-level alias for rapid scripting and console evaluations.
+          </div>
+        </div>
+
+        <div class="tree-node">
+          <div class="tree-branch-title">
+            <span>🌲</span> transformerFuncs
+            <span class="tree-pill">Family Tree</span>
+          </div>
+          <div class="tree-desc">
+            The unified branch housing all KeshavSoft data-to-DOM transformation engines.
+          </div>
+
+          <div class="tree-node" style="margin-top: 10px;">
+            <div class="tree-branch-title" style="color: var(--accent);">
+              <span>⚛️</span> primitive
+              <span class="tree-pill" style="background: rgba(52, 211, 153, 0.15); color: var(--green);">Active (0D Atom)</span>
+            </div>
+            <div class="tree-desc">
+              <code>{ meta: { name, version }, applyTemplate }</code>
+            </div>
+          </div>
+
+          <div class="tree-node" style="opacity: 0.65;">
+            <div class="tree-branch-title">
+              <span>📏</span> oneDimension
+              <span class="tree-pill">Ecosystem (1D Row)</span>
+            </div>
+            <div class="tree-desc">
+              Linear array-to-row transformation engine.
+            </div>
+          </div>
+
+          <div class="tree-node" style="opacity: 0.65;">
+            <div class="tree-branch-title">
+              <span>📊</span> twoDimensions
+              <span class="tree-pill">Ecosystem (2D Matrix)</span>
+            </div>
+            <div class="tree-desc">
+              Matrix grid &amp; multi-column transformation engine.
+            </div>
+          </div>
+        </div>
+
+        <div class="tree-node">
+          <div class="tree-branch-title">
+            <span>📦</span> ["json-transformer-funcs-primitive"]
+            <span class="tree-pill">Package Key</span>
+          </div>
+          <div class="tree-desc">
+            Exact npm package name key providing canonical lookup for build plugins and diagnostic tooling.
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 3: THE CODE ARCHITECTURE -->
+      <h2>3. Inside the <code>registerGlobal/</code> Architecture</h2>
+      <p>
+        The global registration logic is kept clean, isolated, and completely separated from the core transformation algorithm:
+      </p>
+
+      <h3>A. The Metadata Contract: <code>meta.js</code></h3>
+      <p>
+        Located at <code>src/v9/registerGlobal/meta.js</code>, this single-responsibility file publishes the package identity:
+      </p>
+
+      <pre><code>export const meta = {
+    name: "json-transformer-funcs-primitive",
+    version: "1.9.0"
+};
+
+export default meta;</code></pre>
+
+      <h3>B. The Non-Destructive Registrant: <code>index.js</code></h3>
+      <p>
+        Located at <code>src/v9/registerGlobal/index.js</code>, the registrant uses the ES2020 nullish coalescing assignment operator (<code>??=</code>) to initialize the tree safely without overwriting pre-existing structures:
+      </p>
+
+      <pre><code>import meta from "./meta.js";
+
+const registerGlobal = (definition) => {
+    if (typeof globalThis === "undefined" || !definition) return;
+
+    globalThis.ks ??= {};
+
+    // 1. Direct access shortcut
+    globalThis.ks.applyTemplate ??= definition;
+
+    // 2. Transformer funcs family tree
+    globalThis.ks.transformerFuncs ??= {};
+    globalThis.ks.transformerFuncs.primitive = {
+        meta,
+        applyTemplate: definition
+    };
+
+    // 3. Full package name key
+    globalThis.ks["json-transformer-funcs-primitive"] = {
+        meta,
+        applyTemplate: definition
+    };
+};
+
+export { registerGlobal, meta };
+export default registerGlobal;</code></pre>
+
+      <div class="note note-success">
+        <strong>Zero Fail-Safe Pollution:</strong>
+        Notice how simple and clean this function is! We avoid nested try-catches and 20 defensive checks. By relying on native <code>globalThis</code> and <code>??=</code>, it executes in sub-microseconds and guarantees immutability across the family tree.
+      </div>
+
+      <!-- SECTION 4: UNIVERSAL RUNTIME GUARANTEE -->
+      <h2>4. Universal Runtime: Browser, Node.js &amp; SSR</h2>
+      <p>
+        Why <code>globalThis</code> instead of a raw <code>window</code> reference?
+      </p>
+      <table>
+        <thead>
+          <tr>
+            <th>Environment</th>
+            <th>What <code>globalThis</code> points to</th>
+            <th>Safety Result</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Modern Browser</strong></td>
+            <td><code>window</code></td>
+            <td><code>window.ks.applyTemplate</code> is immediately available in console and scripts.</td>
+          </tr>
+          <tr>
+            <td><strong>Node.js / Vitest / Jest</strong></td>
+            <td><code>global</code></td>
+            <td>Tests run smoothly with <code>global.ks</code> without throwing <code>ReferenceError: window is not defined</code>.</td>
+          </tr>
+          <tr>
+            <td><strong>Web Worker</strong></td>
+            <td><code>self</code></td>
+            <td>Workers can perform background JSON transforms with zero overhead.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- SECTION 5: PRACTICAL CODE EXAMPLES -->
+      <h2>5. How to Consume via the Global Tree</h2>
+
+      <h3>Pattern 1: Direct Ergonomic Call</h3>
+      <pre><code>// Any browser script or devtools console
+const data = { title: "Dashboard", badgeClass: "badge bg-primary" };
+const template = { tagName: "h3", attributes: { class: "${badgeClass}" }, textContent: "${title}" };
+
+// Call directly from window.ks:
+const result = window.ks.applyTemplate(data, template);
+console.log(result);</code></pre>
+
+      <h3>Pattern 2: Family Tree Lookup with Version Introspection</h3>
+      <pre><code>// Check version of the primitive engine at runtime
+const primitiveEngine = window.ks.transformerFuncs.primitive;
+
+console.log(`Using ${primitiveEngine.meta.name} v${primitiveEngine.meta.version}`);
+
+// Transform using the namespaced engine:
+const resolvedNode = primitiveEngine.applyTemplate(data, template);</code></pre>
+
+      <!-- SECTION 6: TRY IT LIVE -->
+      <h2>6. Test It Right Now</h2>
+      <p>
+        Visit our <a href="playground.html" style="color: var(--accent); font-weight: 700;">Live Interactive Sandbox</a> where the <strong>window.ks Inspector</strong> displays the live, reactive state of the global tree right inside your browser!
+      </p>
+
+      <div class="page-nav">
+        <a href="index.html">&larr; Back: User Guide</a>
+        <a href="tokens.html">Next: Token Reference &rarr;</a>
+      </div>
+    </main>
+  </div>
+</body>
+</html>
