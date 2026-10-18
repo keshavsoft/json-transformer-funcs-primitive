@@ -3,26 +3,30 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Developer Guide — json-transformer-funcs-primitive</title>
+  <title>Developer Internals — json-transformer-funcs-primitive</title>
   <link rel="stylesheet" href="../style.css">
+  <script src="../script.js" defer></script>
 </head>
 <body>
   <div class="layout">
     <aside class="sidebar">
       <div class="sidebar-brand">
         <a href="../index.html" class="brand-title">
-          <span>⚛️</span> primitive <span class="brand-badge">v1.8</span>
+          <span class="brand-logo">⚛️</span>
+          <span>primitive</span>
+          <span class="brand-badge">v1.9.0</span>
         </a>
         <div class="brand-subtitle">Developer Guide</div>
       </div>
 
       <div class="nav-hub">
-        <a href="../index.html">&larr; Back to Portal</a>
+        <a href="../index.html"><span>&larr;</span> <span>Back to Portal</span></a>
       </div>
 
-      <div class="nav-label">Documentation</div>
+      <div class="nav-label">User Documentation</div>
       <ul class="nav-list">
         <li><a href="../user/index.html" class="nav-link">📘 User Guide</a></li>
+        <li><a href="../user/global-registry.html" class="nav-link">🌳 Global Registry <span class="nav-tag">v1.9</span></a></li>
         <li><a href="../user/tokens.html" class="nav-link">🔤 Token Reference</a></li>
         <li><a href="../user/examples.html" class="nav-link">🍳 Enterprise Cookbook</a></li>
         <li><a href="../user/playground.html" class="nav-link">🧪 Live Sandbox</a></li>
@@ -34,52 +38,111 @@
       </ul>
 
       <div class="sidebar-footer">
-        MIT &bull; KeshavSoft
+        Part of the <a href="https://github.com/keshavsoft" target="_blank">KeshavSoft</a> Ecosystem &bull; MIT
       </div>
     </aside>
 
     <main class="content">
-      <h1>Developer Guide <span class="badge">Engine Internals</span></h1>
-      <div class="lead">
-        A deep architectural tour of the v8 engine pipeline, guard guarantees, and recursive tree resolution.
+      <div class="hero">
+        <div class="hero-meta">
+          <span class="hero-tag">🛠️ Internals</span>
+          <span class="badge">v9 Engine</span>
+        </div>
+        <h1>Developer <span class="gradient-text">Internals</span></h1>
+        <div class="lead">
+          A deep architectural tour of the v9 engine pipeline, immutability guarantees, fail-safe removal, and registerGlobal design.
+        </div>
       </div>
 
       <!-- SECTION 1: ARCHITECTURE MAP -->
-      <h2>1. The 5-Module Pipeline</h2>
+      <h2>1. The v9 Engine Pipeline</h2>
       <p>
-        The engine is structured into five single-responsibility modules inside <code>src/v8/</code>:
+        The engine is structured into modular, single-responsibility units inside <code>src/v9/</code>:
       </p>
 
-      ```
-                              startFunc(inElement, inTemplate)
-                                             │
-                                             ▼
-                                  guardFunc(guard.js)
-                                             │
-                                             ▼
-                               structuredClone(inTemplate)
-                                             │
-                     ┌───────────────────────┼───────────────────────┐
-                     ▼                       ▼                       ▼
-               forAttributes           forTextContent           forChildren
-                     │                       │                       │
-                     └───────────────────────┼───────────────────────┘
-                                             ▼
-                               commonReplace(commonReplace.js)
-                                             │
-                                             ▼
-                                    Resolved JSON AST
-      ```
+      <pre><code>                        startFunc(inElement, inTemplate, showLog)
+                                       │
+                                       ▼
+                              guardFunc(guard/index.js)
+                                       │
+                                       ▼
+                          structuredClone(inTemplate)
+                                       │
+           ┌───────────────────────────┼───────────────────────────┐
+           ▼                           ▼                           ▼
+     forAttributes               forTextContent               forChildren
+           │                           │                           │
+           └───────────────────────────┼───────────────────────────┘
+                                       ▼
+                         commonReplace(commonReplace.js)
+                                       │
+                                       ▼
+                          Resolved Immutable Element AST
+                                       │
+                                       ▼
+                         registerGlobal(registerGlobal/index.js)
+                                       │
+                                       ▼
+                           window.ks Family Tree</code></pre>
 
       <!-- SECTION 2: MODULE WALKTHROUGH -->
       <h2>2. Module Breakdown</h2>
 
-      <h3>A. <code>guard/guard.js</code> &bull; The Gatekeeper</h3>
+      <h3>A. <code>src/v9/registerGlobal/meta.js</code> &bull; The Identity Contract</h3>
+      <p>
+        Provides the immutable identity of the package for runtime telemetry and microfrontend inspection:
+      </p>
+      <pre><code>export const meta = {
+    name: "json-transformer-funcs-primitive",
+    version: "1.9.0"
+};
+
+export default meta;</code></pre>
+
+      <h3>B. <code>src/v9/registerGlobal/index.js</code> &bull; The Tree Registrant</h3>
+      <p>
+        Attaches the function to the global scope cleanly and concisely:
+      </p>
+      <pre><code>import meta from "./meta.js";
+
+const registerGlobal = (definition) => {
+    if (typeof globalThis === "undefined" || !definition) return;
+
+    globalThis.ks ??= {};
+
+    // Direct access shortcut
+    globalThis.ks.applyTemplate ??= definition;
+
+    // Transformer funcs family tree
+    globalThis.ks.transformerFuncs ??= {};
+    globalThis.ks.transformerFuncs.primitive = {
+        meta,
+        applyTemplate: definition
+    };
+
+    // Full package key
+    globalThis.ks["json-transformer-funcs-primitive"] = {
+        meta,
+        applyTemplate: definition
+    };
+};
+
+export { registerGlobal, meta };
+export default registerGlobal;</code></pre>
+
+      <div class="note note-success">
+        <strong>Design Rationale — Why No Over-Engineered Fail-Safes?</strong>
+        In previous revisions, defensive checks included layers of try-catch blocks, window existence validations, and type-guards. In <code>v9</code>, we follow the modern JS standard:
+        1. <code>globalThis</code> is universally standard across all ES2020 runtimes (Browser, Node, Deno, Bun, Cloudflare Workers).
+        2. Nullish coalescing assignment (<code>??=</code>) natively prevents overwriting existing namespaces while creating missing containers in 1 CPU instruction.
+      </div>
+
+      <h3>C. <code>guard/guard.js</code> &bull; The Gatekeeper</h3>
       <p>
         Validates arguments prior to execution. If <code>inTemplate</code> is null, undefined, or a non-object primitive, or if <code>inElement</code> is an array or non-object, it halts immediately with a descriptive <code>TypeError</code>.
       </p>
 
-      <h3>B. <code>src/v8/index.js</code> &bull; The Orchestrator</h3>
+      <h3>D. <code>src/v9/index.js</code> &bull; The Orchestrator</h3>
       <p>
         Immediately assigns inputs to <code>localElement</code> and <code>localTemplate</code> (respecting the KeshavSoft <code>in</code>/<code>local</code> parameter convention). It deep clones the template via <code>structuredClone</code> and dispatches:
       </p>
@@ -90,44 +153,44 @@
         <li>If <code>children</code> exists &rarr; calls <code>forChildren</code>.</li>
       </ul>
 
-      <h3>C. <code>commonReplace.js</code> &bull; The Interpolation Core</h3>
+      <h3>E. <code>commonReplace.js</code> &bull; The Interpolation Core</h3>
       <p>
         Executes regular expression replacement on string values:
       </p>
       <pre><code>inStringTemplate.replace(/\$\{(\w+)\}/g, (match, key) => {
     return inElement[key] !== undefined ? inElement[key] : match;
 });</code></pre>
+
+      <!-- SECTION 3: RECURSIVE RESOLUTION -->
+      <h2>3. Recursive Child Resolution</h2>
       <p>
-        Additionally handles the two specialized token short-circuits:
+        When a node contains a <code>children</code> array, <code>forChildren</code> iterates through each item:
+      </p>
+      <ol>
+        <li>If the child is a nested object, it recursively invokes <code>startFunc(localElement, child)</code>.</li>
+        <li>If the child is a string, it calls <code>commonReplace(child, localElement)</code>.</li>
+        <li>If the child is a primitive or null, it preserves it verbatim.</li>
+      </ol>
+
+      <!-- SECTION 4: TESTING STRATEGY -->
+      <h2>4. Verification &amp; Testing Suite</h2>
+      <p>
+        The package maintains 100% test coverage through <code>samples/runAll.js</code>:
       </p>
       <ul>
-        <li><code>${agg:count}</code>: Returns numeric count from <code>inElement.rowData.length</code>.</li>
-        <li><code>${rowValue}</code>: Returns raw value from <code>inElement.rowData</code>.</li>
+        <li><strong>Step 1:</strong> Simple Element interpolation.</li>
+        <li><strong>Step 2:</strong> Nested Card Component tree resolution.</li>
+        <li><strong>Step 3:</strong> Special Tokens (<code>${agg:count}</code> and <code>${rowValue}</code>).</li>
+        <li><strong>Step 4:</strong> Guard Validations (type error assertions).</li>
+        <li><strong>Step 5:</strong> Global Registration (verifying <code>globalThis.ks.applyTemplate</code> and <code>globalThis.ks.transformerFuncs.primitive</code>).</li>
       </ul>
 
-      <h3>D. <code>forAttributes/index.js</code> &bull; Attribute Walker</h3>
-      <p>
-        Iterates over the <code>attributes</code> key-value dictionary and recursively calls the orchestrator for each value. This ensures nested attributes or complex attribute configs resolve cleanly.
-      </p>
-
-      <h3>E. <code>forChildren/index.js</code> &bull; Recursive Child Mapper</h3>
-      <p>
-        Iterates over the <code>children</code> array:
-      </p>
-      <pre><code>const newChildren = localTemplateChildren.map(element => {
-    return parentIndex(inElement, element);
-});</code></pre>
-
-      <!-- SECTION 3: TEST SUITE -->
-      <h2>3. Test Verification Suite</h2>
-      <p>
-        To run the complete verification suite verifying single elements, nested card structures, special tokens, and all guard assertions:
-      </p>
-      <pre><code>npm test</code></pre>
+      <pre><code>// Run test suite locally:
+npm test</code></pre>
 
       <div class="page-nav">
-        <a href="../user/playground.html">&larr; Back: Live Sandbox</a>
-        <a href="../index.html">Back to Main Portal &rarr;</a>
+        <a href="../user/playground.html">&larr; Back: Live Sandbox Studio</a>
+        <a href="../index.html">Portal Home &rarr;</a>
       </div>
     </main>
   </div>

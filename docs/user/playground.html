@@ -3,107 +3,391 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Live Sandbox — json-transformer-funcs-primitive</title>
-  <link rel="stylesheet" href="../style.css">
+  <title>Primitive Playground — json-transformer-funcs-primitive</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: #090d16 !important;
+      color: #e2e8f0 !important;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* Minimal Topbar */
+    .topbar {
+      height: 52px;
+      background: #0f172a;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .topbar-left .tag {
+      font-size: 0.7rem;
+      background: rgba(56, 189, 248, 0.15);
+      color: #38bdf8;
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      padding: 2px 7px;
+      border-radius: 999px;
+      font-weight: 600;
+    }
+
+    .topbar-center {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .topbar-center label {
+      font-size: 0.82rem;
+      color: #94a3b8;
+      font-weight: 600;
+    }
+
+    .preset-select {
+      background: #090d16;
+      color: #f1f5f9;
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .preset-select:focus {
+      border-color: #38bdf8;
+    }
+
+    .btn-action {
+      background: #0284c7;
+      color: #ffffff;
+      border: none;
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 0.84rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.15s ease;
+    }
+
+    .btn-action:hover {
+      background: #0369a1;
+    }
+
+    .btn-secondary-action {
+      background: rgba(255, 255, 255, 0.08);
+      color: #cbd5e1;
+      border: 1px solid rgba(148, 163, 184, 0.2);
+    }
+
+    .btn-secondary-action:hover {
+      background: rgba(255, 255, 255, 0.15);
+      color: #ffffff;
+    }
+
+    .topbar-right a {
+      color: #94a3b8;
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: color 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .topbar-right a:hover {
+      color: #38bdf8;
+    }
+
+    /* Workspace 3-column Layout */
+    .workspace {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1.1fr;
+      overflow: hidden;
+      background: #090d16;
+    }
+
+    @media (max-width: 992px) {
+      .workspace {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1fr 1fr;
+        overflow-y: auto;
+      }
+    }
+
+    .editor-pane {
+      display: flex;
+      flex-direction: column;
+      border-right: 1px solid rgba(148, 163, 184, 0.12);
+      height: 100%;
+      overflow: hidden;
+      background: #090d16;
+    }
+
+    .editor-pane:last-child {
+      border-right: none;
+    }
+
+    .pane-header {
+      height: 38px;
+      background: #0c1222;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 14px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #94a3b8;
+      flex-shrink: 0;
+    }
+
+    .badge-lang {
+      font-size: 0.7rem;
+      color: #38bdf8;
+      font-weight: 600;
+    }
+
+    .pane-editor {
+      flex: 1;
+      width: 100%;
+      height: 100%;
+      background: #090d16;
+      color: #f1f5f9;
+      border: none;
+      padding: 14px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 0.88rem;
+      line-height: 1.6;
+      resize: none;
+      outline: none;
+      overflow: auto;
+      white-space: pre;
+    }
+
+    .pane-editor.readonly {
+      background: #050811;
+      color: #22d3ee;
+    }
+
+    /* Output Tabs */
+    .tabs-group {
+      display: flex;
+      gap: 4px;
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 4px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .tab-btn:hover {
+      color: #ffffff;
+    }
+
+    .tab-btn.active {
+      color: #ffffff;
+      background: rgba(56, 189, 248, 0.2);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+    }
+
+    .pane-content {
+      flex: 1;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    #domPreviewBox {
+      flex: 1;
+      background: #ffffff;
+      color: #1e293b;
+      padding: 24px;
+      overflow-y: auto;
+    }
+
+    #inspectorContent {
+      flex: 1;
+      background: #050811;
+      padding: 18px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.84rem;
+      overflow-y: auto;
+    }
+
+    .inspector-row {
+      display: flex;
+      gap: 12px;
+      padding: 8px 12px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.03);
+      margin-bottom: 8px;
+    }
+
+    .inspector-key {
+      color: #38bdf8;
+      font-weight: 700;
+    }
+
+    .inspector-val {
+      color: #f1f5f9;
+    }
+
+    /* Minimal Statusbar */
+    .statusbar {
+      height: 30px;
+      background: #070b14;
+      border-top: 1px solid rgba(148, 163, 184, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 14px;
+      font-size: 0.76rem;
+      color: #64748b;
+      flex-shrink: 0;
+    }
+
+    .status-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #10b981;
+    }
+
+    .dot.error {
+      background: #ef4444;
+    }
+
+    #timingText {
+      color: #38bdf8;
+      font-family: ui-monospace, monospace;
+      font-weight: 600;
+    }
+  </style>
 </head>
 <body>
-  <div class="layout">
-    <aside class="sidebar">
-      <div class="sidebar-brand">
-        <a href="../index.html" class="brand-title">
-          <span>⚛️</span> primitive <span class="brand-badge">v1.8</span>
-        </a>
-        <div class="brand-subtitle">Live Sandbox</div>
+
+  <!-- MINIMAL TOPBAR -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <span>⚛️</span>
+      <span>primitive</span>
+      <span class="tag">v1.9.0</span>
+    </div>
+
+    <div class="topbar-center">
+      <label for="presetSelect">Preset:</label>
+      <select id="presetSelect" class="preset-select">
+        <option value="card">Bootstrap 5 Card</option>
+        <option value="formField">Form Input Row</option>
+        <option value="buttonGroup">Action Button Group</option>
+        <option value="countToken">Special Token: ${agg:count}</option>
+        <option value="rowValueToken">Special Token: ${rowValue}</option>
+        <option value="globalTree">Global Tree: window.ks</option>
+      </select>
+      <button id="runBtn" class="btn-action"><span>▶</span> Run</button>
+      <button id="copyBtn" class="btn-action btn-secondary-action"><span>📋</span> Copy AST</button>
+    </div>
+
+    <div class="topbar-right">
+      <a href="../index.html"><span>&larr;</span> Documentation</a>
+    </div>
+  </header>
+
+  <!-- 3-PANE WORKSPACE: NO SIDEBAR, NO HEAVY HERO, ONLY CONTENT -->
+  <main class="workspace">
+    <!-- PANE 1: inElement -->
+    <div class="editor-pane">
+      <div class="pane-header">
+        <span>1. inElement (Data)</span>
+        <span class="badge-lang">JSON</span>
       </div>
+      <textarea id="dataEditor" class="pane-editor" spellcheck="false"></textarea>
+    </div>
 
-      <div class="nav-hub">
-        <a href="../index.html">&larr; Back to Portal</a>
+    <!-- PANE 2: inTemplate -->
+    <div class="editor-pane">
+      <div class="pane-header">
+        <span>2. inTemplate (Blueprint)</span>
+        <span class="badge-lang">JSON / String</span>
       </div>
+      <textarea id="templateEditor" class="pane-editor" spellcheck="false"></textarea>
+    </div>
 
-      <div class="nav-label">User Documentation</div>
-      <ul class="nav-list">
-        <li><a href="index.html" class="nav-link">📘 User Guide</a></li>
-        <li><a href="tokens.html" class="nav-link">🔤 Token Reference</a></li>
-        <li><a href="examples.html" class="nav-link">🍳 Enterprise Cookbook</a></li>
-        <li><a href="playground.html" class="nav-link active">🧪 Live Sandbox</a></li>
-      </ul>
-
-      <div class="nav-label">Architecture</div>
-      <ul class="nav-list">
-        <li><a href="../developer/index.html" class="nav-link">🛠️ Developer Internals</a></li>
-      </ul>
-
-      <div class="sidebar-footer">
-        MIT &bull; KeshavSoft
-      </div>
-    </aside>
-
-    <main class="content">
-      <h1>Live In-Browser Sandbox <span class="badge">Interactive</span></h1>
-      <div class="lead">
-        Test templates, data objects, and token replacement live with instant client-side execution.
-      </div>
-
-      <div class="playground-section">
-        <div class="playground-header">
-          <div class="playground-title">
-            <span>🧪</span> Primitive Template Studio
-          </div>
-          <div class="preset-controls">
-            <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">Preset:</span>
-            <select id="presetSelect" class="preset-select">
-              <option value="card">Bootstrap 5 Card</option>
-              <option value="formField">Form Input Row</option>
-              <option value="buttonGroup">Action Button Group</option>
-              <option value="countToken">Special Token: ${agg:count}</option>
-              <option value="rowValueToken">Special Token: ${rowValue}</option>
-            </select>
-            <button id="runBtn" class="btn"><span>▶</span> Run</button>
-            <button id="copyBtn" class="btn btn-secondary"><span>📋</span> Copy Output</button>
-          </div>
+    <!-- PANE 3: Output (AST / Rendered DOM / window.ks) -->
+    <div class="editor-pane">
+      <div class="pane-header">
+        <div class="tabs-group">
+          <button id="tabAst" class="tab-btn active" type="button">JSON AST</button>
+          <button id="tabDom" class="tab-btn" type="button">DOM Preview</button>
+          <button id="tabTree" class="tab-btn" type="button">window.ks</button>
         </div>
-
-        <div class="playground-grid">
-          <!-- PANE 1: DATA -->
-          <div class="pane">
-            <div class="pane-header">
-              1. inElement (Data Dictionary)
-            </div>
-            <textarea id="dataEditor" class="pane-editor" spellcheck="false"></textarea>
-          </div>
-
-          <!-- PANE 2: TEMPLATE -->
-          <div class="pane">
-            <div class="pane-header">
-              2. inTemplate (The Mold)
-            </div>
-            <textarea id="templateEditor" class="pane-editor" spellcheck="false"></textarea>
-          </div>
-
-          <!-- PANE 3: RESULT -->
-          <div class="pane">
-            <div class="pane-header">
-              3. Resolved Element AST
-            </div>
-            <textarea id="resultEditor" class="pane-editor readonly" readonly spellcheck="false"></textarea>
-          </div>
-        </div>
-
-        <div class="status-bar">
-          <div class="status-indicator">
-            <div id="statusDot" class="status-dot"></div>
-            <span id="statusText">Engine Ready &bull; Pure Invariant Maintained</span>
-          </div>
-          <span id="timingText">Execution: &lt; 0.1ms</span>
-        </div>
+        <span id="timingText">&lt; 0.1ms</span>
       </div>
-
-      <div class="page-nav">
-        <a href="examples.html">&larr; Back: Enterprise Cookbook</a>
-        <a href="../developer/index.html">Next: Developer Internals &rarr;</a>
+      <div class="pane-content">
+        <textarea id="resultEditor" class="pane-editor readonly" readonly spellcheck="false"></textarea>
+        <div id="domPreviewBox" style="display: none;"></div>
+        <div id="inspectorContent" style="display: none;"></div>
       </div>
-    </main>
-  </div>
+    </div>
+  </main>
+
+  <!-- MINIMAL STATUSBAR -->
+  <footer class="statusbar">
+    <div class="status-left">
+      <span id="statusDot" class="dot"></span>
+      <span id="statusText">Ready</span>
+    </div>
+    <div class="status-right">
+      <span>globalThis.ks.applyTemplate active</span>
+    </div>
+  </footer>
 
   <!-- SCRIPT FOR COMPILING & RESOLVING IN BROWSER -->
   <script type="module">
@@ -112,12 +396,12 @@
     const presets = {
       card: {
         data: {
-          cardClass: "card shadow-sm border-0 w-100",
-          headerClass: "card-header bg-transparent d-flex justify-content-between align-items-center",
+          cardClass: "card shadow-sm border border-secondary-subtle p-3",
+          headerClass: "d-flex justify-content-between align-items-center mb-2",
           title: "Account Overview",
           badgeClass: "badge text-bg-success",
-          badgeText: "Active",
-          bodyClass: "card-body",
+          badgeText: "Active SLA",
+          bodyClass: "text-muted",
           description: "All enterprise services operating within standard SLA parameters."
         },
         template: {
@@ -128,7 +412,7 @@
               tagName: "div",
               attributes: { class: "${headerClass}" },
               children: [
-                { tagName: "h5", attributes: { class: "mb-0" }, textContent: "${title}" },
+                { tagName: "h5", attributes: { class: "mb-0 text-dark fw-bold" }, textContent: "${title}" },
                 { tagName: "span", attributes: { class: "${badgeClass}" }, textContent: "${badgeText}" }
               ]
             },
@@ -136,7 +420,7 @@
               tagName: "div",
               attributes: { class: "${bodyClass}" },
               children: [
-                { tagName: "p", attributes: { class: "card-text text-muted mb-0" }, textContent: "${description}" }
+                { tagName: "p", attributes: { class: "mb-0" }, textContent: "${description}" }
               ]
             }
           ]
@@ -147,8 +431,8 @@
           fieldId: "user-name",
           label: "Full Name",
           placeholder: "e.g. Marie Curie",
-          inputClass: "form-control form-control-lg",
-          isRequired: "true"
+          inputClass: "form-control",
+          helpText: "Enter your legal name as shown on passport."
         },
         template: {
           tagName: "div",
@@ -156,7 +440,7 @@
           children: [
             {
               tagName: "label",
-              attributes: { for: "${fieldId}", class: "form-label fw-bold" },
+              attributes: { for: "${fieldId}", class: "form-label fw-bold text-dark" },
               textContent: "${label}"
             },
             {
@@ -165,9 +449,13 @@
                 type: "text",
                 id: "${fieldId}",
                 class: "${inputClass}",
-                placeholder: "${placeholder}",
-                required: "${isRequired}"
+                placeholder: "${placeholder}"
               }
+            },
+            {
+              tagName: "div",
+              attributes: { class: "form-text" },
+              textContent: "${helpText}"
             }
           ]
         }
@@ -181,7 +469,7 @@
         },
         template: {
           tagName: "div",
-          attributes: { class: "d-flex gap-2 justify-content-end" },
+          attributes: { class: "d-flex gap-2 justify-content-start" },
           children: [
             { tagName: "button", attributes: { type: "submit", class: "${saveClass}" }, textContent: "${saveLabel}" },
             { tagName: "button", attributes: { type: "button", class: "${cancelClass}" }, textContent: "${cancelLabel}" }
@@ -195,10 +483,10 @@
         },
         template: {
           tagName: "div",
-          attributes: { class: "d-flex align-items-center gap-2 p-2 border rounded" },
+          attributes: { class: "d-flex align-items-center justify-content-between p-3 border rounded bg-light" },
           children: [
-            { tagName: "span", attributes: { class: "fw-semibold" }, textContent: "${widgetTitle}:" },
-            { tagName: "span", attributes: { class: "badge bg-danger rounded-pill" }, textContent: "${agg:count}" }
+            { tagName: "span", attributes: { class: "fw-bold text-dark" }, textContent: "${widgetTitle}:" },
+            { tagName: "span", attributes: { class: "badge bg-danger rounded-pill fs-6" }, textContent: "${agg:count}" }
           ]
         }
       },
@@ -207,18 +495,54 @@
           rowData: { userId: 442, role: "SuperAdmin", org: "KeshavSoft" }
         },
         template: "${rowValue}"
+      },
+      globalTree: {
+        data: {
+          engineStatus: "Connected",
+          calledVia: "window.ks.transformerFuncs.primitive"
+        },
+        template: {
+          tagName: "div",
+          attributes: { class: "alert alert-success d-flex align-items-center gap-2 mb-0" },
+          children: [
+            { tagName: "strong", textContent: "Status: ${engineStatus}!" },
+            { tagName: "span", textContent: "Dispatched through ${calledVia}" }
+          ]
+        }
       }
     };
 
     const dataEditor = document.getElementById("dataEditor");
     const templateEditor = document.getElementById("templateEditor");
     const resultEditor = document.getElementById("resultEditor");
+    const domPreviewBox = document.getElementById("domPreviewBox");
+    const inspectorContent = document.getElementById("inspectorContent");
     const presetSelect = document.getElementById("presetSelect");
     const runBtn = document.getElementById("runBtn");
     const copyBtn = document.getElementById("copyBtn");
     const statusDot = document.getElementById("statusDot");
     const statusText = document.getElementById("statusText");
     const timingText = document.getElementById("timingText");
+
+    const tabAst = document.getElementById("tabAst");
+    const tabDom = document.getElementById("tabDom");
+    const tabTree = document.getElementById("tabTree");
+
+    function switchTab(mode) {
+      tabAst.classList.toggle("active", mode === "ast");
+      tabDom.classList.toggle("active", mode === "dom");
+      tabTree.classList.toggle("active", mode === "tree");
+
+      resultEditor.style.display = mode === "ast" ? "block" : "none";
+      domPreviewBox.style.display = mode === "dom" ? "block" : "none";
+      inspectorContent.style.display = mode === "tree" ? "block" : "none";
+
+      if (mode === "tree") updateInspector();
+    }
+
+    tabAst.addEventListener("click", () => switchTab("ast"));
+    tabDom.addEventListener("click", () => switchTab("dom"));
+    tabTree.addEventListener("click", () => switchTab("tree"));
 
     function loadPreset(name) {
       const preset = presets[name];
@@ -228,6 +552,56 @@
         ? preset.template 
         : JSON.stringify(preset.template, null, 2);
       executeTransform();
+    }
+
+    // Build real DOM node from AST
+    function renderAstToDom(node) {
+      if (!node) return null;
+      if (typeof node === "string") return document.createTextNode(node);
+      if (typeof node === "number") return document.createTextNode(String(node));
+
+      const el = document.createElement(node.tagName || "div");
+      if (node.attributes) {
+        for (const [k, v] of Object.entries(node.attributes)) {
+          if (v !== undefined) el.setAttribute(k, v);
+        }
+      }
+      if (node.textContent !== undefined) {
+        el.textContent = node.textContent;
+      }
+      if (Array.isArray(node.children)) {
+        for (const child of node.children) {
+          const childDom = renderAstToDom(child);
+          if (childDom) el.appendChild(childDom);
+        }
+      }
+      return el;
+    }
+
+    function updateInspector() {
+      if (!window.ks) {
+        inspectorContent.innerHTML = `<div class="text-danger">window.ks is not initialized</div>`;
+        return;
+      }
+      const prim = window.ks.transformerFuncs?.primitive;
+      inspectorContent.innerHTML = `
+        <div class="inspector-row">
+          <span class="inspector-key">window.ks.applyTemplate</span>
+          <span class="inspector-val">[Function: applyTemplate]</span>
+        </div>
+        <div class="inspector-row">
+          <span class="inspector-key">window.ks.transformerFuncs.primitive.meta</span>
+          <span class="inspector-val">${JSON.stringify(prim?.meta || {}, null, 2)}</span>
+        </div>
+        <div class="inspector-row">
+          <span class="inspector-key">window.ks["json-transformer-funcs-primitive"]</span>
+          <span class="inspector-val">{ meta, applyTemplate }</span>
+        </div>
+        <div class="inspector-row">
+          <span class="inspector-key">Status</span>
+          <span class="inspector-val" style="color: #10b981;">Ready &bull; Type: ${typeof window.ks.applyTemplate}</span>
+        </div>
+      `;
     }
 
     function executeTransform() {
@@ -241,20 +615,28 @@
         }
 
         const start = performance.now();
-        const result = applyTemplate(rawData, rawTemplate);
+        const fn = (window.ks && window.ks.applyTemplate) || applyTemplate;
+        const result = fn(rawData, rawTemplate);
         const duration = (performance.now() - start).toFixed(2);
 
         resultEditor.value = typeof result === "string" 
           ? result 
           : JSON.stringify(result, null, 2);
         
-        statusDot.className = "status-dot";
-        statusText.textContent = "Resolution Succeeded • Template Cloned";
-        timingText.textContent = `Execution: ${duration}ms`;
+        domPreviewBox.innerHTML = "";
+        const domResult = renderAstToDom(result);
+        if (domResult) domPreviewBox.appendChild(domResult);
+
+        statusDot.className = "dot";
+        statusText.textContent = "Resolved Successfully";
+        timingText.textContent = `${duration}ms`;
+
+        updateInspector();
       } catch (err) {
         resultEditor.value = `Error: ${err.message}`;
-        statusDot.className = "status-dot error";
-        statusText.textContent = `Guard Violation: ${err.message}`;
+        domPreviewBox.innerHTML = `<div class="alert alert-danger mb-0">${err.message}</div>`;
+        statusDot.className = "dot error";
+        statusText.textContent = err.message;
         timingText.textContent = "Failed";
       }
     }
@@ -264,10 +646,18 @@
     dataEditor.addEventListener("input", executeTransform);
     templateEditor.addEventListener("input", executeTransform);
 
+    // Ctrl+Enter or Cmd+Enter to run
+    window.addEventListener("keydown", (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
+        e.preventDefault();
+        executeTransform();
+      }
+    });
+
     copyBtn.addEventListener("click", () => {
       navigator.clipboard.writeText(resultEditor.value);
-      copyBtn.textContent = "✓ Copied!";
-      setTimeout(() => copyBtn.innerHTML = "<span>📋</span> Copy Output", 1500);
+      copyBtn.innerHTML = "<span>✓</span> Copied!";
+      setTimeout(() => copyBtn.innerHTML = "<span>📋</span> Copy AST", 1500);
     });
 
     // Initialize with default preset

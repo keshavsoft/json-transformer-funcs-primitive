@@ -5,24 +5,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>User Guide — json-transformer-funcs-primitive</title>
   <link rel="stylesheet" href="../style.css">
+  <script src="../script.js" defer></script>
 </head>
 <body>
   <div class="layout">
     <aside class="sidebar">
       <div class="sidebar-brand">
         <a href="../index.html" class="brand-title">
-          <span>⚛️</span> primitive <span class="brand-badge">v1.8</span>
+          <span class="brand-logo">⚛️</span>
+          <span>primitive</span>
+          <span class="brand-badge">v1.9.0</span>
         </a>
         <div class="brand-subtitle">User Guide</div>
       </div>
 
       <div class="nav-hub">
-        <a href="../index.html">&larr; Back to Portal</a>
+        <a href="playground.html"><span>🧪</span> <span>Live Sandbox &amp; Tree</span></a>
       </div>
 
-      <div class="nav-label">User Documentation</div>
+      <div class="nav-label">Documentation</div>
       <ul class="nav-list">
+        <li><a href="../index.html" class="nav-link">📖 The Story</a></li>
         <li><a href="index.html" class="nav-link active">📘 User Guide</a></li>
+        <li><a href="global-registry.html" class="nav-link">🌳 Global Registry <span class="nav-tag">v1.9</span></a></li>
         <li><a href="tokens.html" class="nav-link">🔤 Token Reference</a></li>
         <li><a href="examples.html" class="nav-link">🍳 Enterprise Cookbook</a></li>
         <li><a href="playground.html" class="nav-link">🧪 Live Sandbox</a></li>
@@ -34,107 +39,133 @@
       </ul>
 
       <div class="sidebar-footer">
-        MIT &bull; KeshavSoft
+        Part of the <a href="https://github.com/keshavsoft" target="_blank">KeshavSoft</a> Ecosystem &bull; MIT
       </div>
     </aside>
 
     <main class="content">
-      <h1>User Guide <span class="badge">API &amp; Usage</span></h1>
-      <div class="lead">
-        Learn how to configure data dictionaries, author templates, and leverage pure token interpolation.
+      <div class="hero">
+        <div class="hero-meta">
+          <span class="hero-tag">📘 Documentation</span>
+          <span class="badge">API Reference</span>
+        </div>
+        <h1>User <span class="gradient-text">Guide</span></h1>
+        <div class="lead">
+          Learn how to pass data dictionaries, structure element blueprints, and safely interpolate dynamic values.
+        </div>
       </div>
 
       <!-- SECTION 1: SIGNATURE -->
       <h2>1. The Function Contract</h2>
+      <p>Using ES Modules:</p>
       <pre><code>import applyTemplate from "json-transformer-funcs-primitive";
 
 const resolved = applyTemplate(inElement, inTemplate, showLog);</code></pre>
 
-      <table>
-        <thead>
-          <tr>
-            <th>Argument</th>
-            <th>Type</th>
-            <th>Obligation</th>
-            <th>Description</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><code>inElement</code></td>
-            <td><code>Plain Object</code></td>
-            <td><strong>Required</strong></td>
-            <td>A dictionary of keys and values used to replace matching <code>${key}</code> tokens.</td>
-          </tr>
-          <tr>
-            <td><code>inTemplate</code></td>
-            <td><code>Object | String</code></td>
-            <td><strong>Required</strong></td>
-            <td>The JSON-to-DOM AST node or string template containing <code>${placeholder}</code> slots.</td>
-          </tr>
-          <tr>
-            <td><code>showLog</code></td>
-            <td><code>Boolean</code></td>
-            <td>Optional</td>
-            <td>When <code>true</code>, outputs debugging telemetry to <code>console.log</code>.</td>
-          </tr>
-        </tbody>
-      </table>
+      <p>Or via the Global Tree:</p>
+      <pre><code>// 1. Direct top-level access
+const resolved = window.ks.applyTemplate(inElement, inTemplate, showLog);
+
+// 2. Family tree access
+const resolved = window.ks.transformerFuncs.primitive.applyTemplate(inElement, inTemplate, showLog);</code></pre>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Argument</th>
+              <th>Type</th>
+              <th>Obligation</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>inElement</code></td>
+              <td><code>Plain Object</code></td>
+              <td><strong>Required</strong></td>
+              <td>A key-value dictionary used to replace matching <code>${key}</code> tokens.</td>
+            </tr>
+            <tr>
+              <td><code>inTemplate</code></td>
+              <td><code>Object | String</code></td>
+              <td><strong>Required</strong></td>
+              <td>The JSON-to-DOM AST node or string template containing <code>${placeholder}</code> slots.</td>
+            </tr>
+            <tr>
+              <td><code>showLog</code></td>
+              <td><code>Boolean</code></td>
+              <td>Optional</td>
+              <td>When <code>true</code>, outputs debugging telemetry to <code>console.log</code>.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
       <!-- SECTION 2: GUARDS -->
-      <h2>2. Guard Rails &amp; Exceptions</h2>
+      <h2>2. Guard Rails &amp; Fail-Fast Exceptions</h2>
       <p>
-        The primitive engine enforces strict typing at the boundary to eliminate silent failures downstream.
-        The following table lists the guard checks executed before any parsing occurs:
+        The primitive engine enforces strict boundary validation before any execution occurs. If invalid types are supplied, it halts immediately with a clear error:
       </p>
 
-      <table>
-        <thead>
-          <tr>
-            <th>Input Condition</th>
-            <th>Error Thrown</th>
-            <th>Design Reason</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><code>inTemplate === null || undefined</code></td>
-            <td><code>TypeError: inTemplate is required</code></td>
-            <td>Cannot interpolate into an empty or unprovided template.</td>
-          </tr>
-          <tr>
-            <td><code>typeof inTemplate !== "object" &amp;&amp; !== "string"</code></td>
-            <td><code>TypeError: inTemplate must be an object or string</code></td>
-            <td>Primitives like numbers or booleans cannot serve as templates.</td>
-          </tr>
-          <tr>
-            <td><code>!inElement || typeof inElement !== "object"</code></td>
-            <td><code>TypeError: inElement must be an object</code></td>
-            <td>Data values must be supplied as a lookup dictionary.</td>
-          </tr>
-          <tr>
-            <td><code>Array.isArray(inElement)</code></td>
-            <td><code>TypeError: inElement must be an object</code></td>
-            <td>Primitive takes 1 object. Arrays must be processed by the 1D engine.</td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Input Condition</th>
+              <th>Error Thrown</th>
+              <th>Design Rationale</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>inTemplate</code> is <code>null</code> or <code>undefined</code></td>
+              <td><code>TypeError: inTemplate is undefined or null</code></td>
+              <td>Prevents silent no-ops when templates fail to load from server.</td>
+            </tr>
+            <tr>
+              <td><code>inTemplate</code> is not an Object or String</td>
+              <td><code>TypeError: inTemplate is not an object or string</code></td>
+              <td>Guarantees that only valid JSON AST nodes or string templates enter the pipeline.</td>
+            </tr>
+            <tr>
+              <td><code>inElement</code> is an Array</td>
+              <td><code>TypeError: inElement is an array</code></td>
+              <td>Enforces the 0D/Atom boundary. Array mapping belongs to <code>1D</code> (one-dimension).</td>
+            </tr>
+            <tr>
+              <td><code>inElement</code> is not an Object</td>
+              <td><code>TypeError: inElement is not an object</code></td>
+              <td>Tokens can only be resolved against structured key-value dictionaries.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
       <!-- SECTION 3: IMMUTABILITY -->
-      <h2>3. Absolute Immutability</h2>
+      <h2>3. Immutability &amp; Zero Side-Effects</h2>
       <p>
-        A core invariant of the KeshavSoft ecosystem is that <strong>templates must remain untouchable</strong>.
-        When you run:
+        A core tenet of the engine is <strong>100% AST Immutability</strong>.
+        Internally, <code>structuredClone(inTemplate)</code> creates a pristine clone before any token resolution begins.
       </p>
-      <pre><code>const result = applyTemplate(data, template);</code></pre>
+      <ul>
+        <li>The original <code>inTemplate</code> is never mutated in memory.</li>
+        <li>You can safely cache, reuse, and share template definitions across thousands of calls without contamination.</li>
+      </ul>
+
+      <!-- SECTION 4: PARAMETER CONVENTIONS -->
+      <h2>4. KeshavSoft Coding Conventions</h2>
       <p>
-        The engine calls <code>structuredClone(localTemplate)</code> upfront.
-        Your original template reference is never altered in memory, allowing you to reuse the exact same template across thousands of rows or requests safely without cache pollution.
+        All KeshavSoft modules follow a strict variable naming standard:
       </p>
+      <ul>
+        <li><strong><code>in</code> prefix:</strong> Parameters entering a function (e.g. <code>inElement</code>, <code>inTemplate</code>).</li>
+        <li><strong><code>local</code> prefix:</strong> Variables scoped inside the function body (e.g. <code>localElement</code>, <code>localClonedTemplate</code>).</li>
+      </ul>
 
       <div class="page-nav">
         <a href="../index.html">&larr; Back: The Story</a>
-        <a href="tokens.html">Next: Token Reference &rarr;</a>
+        <a href="global-registry.html">Next: Global Registry &rarr;</a>
       </div>
     </main>
   </div>

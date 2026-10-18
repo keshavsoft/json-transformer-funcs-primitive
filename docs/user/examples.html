@@ -5,24 +5,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Enterprise Cookbook — json-transformer-funcs-primitive</title>
   <link rel="stylesheet" href="../style.css">
+  <script src="../script.js" defer></script>
 </head>
 <body>
   <div class="layout">
     <aside class="sidebar">
       <div class="sidebar-brand">
         <a href="../index.html" class="brand-title">
-          <span>⚛️</span> primitive <span class="brand-badge">v1.8</span>
+          <span class="brand-logo">⚛️</span>
+          <span>primitive</span>
+          <span class="brand-badge">v1.9.0</span>
         </a>
         <div class="brand-subtitle">Cookbook</div>
       </div>
 
       <div class="nav-hub">
-        <a href="../index.html">&larr; Back to Portal</a>
+        <a href="playground.html"><span>🧪</span> <span>Live Sandbox &amp; Tree</span></a>
       </div>
 
-      <div class="nav-label">User Documentation</div>
+      <div class="nav-label">Documentation</div>
       <ul class="nav-list">
+        <li><a href="../index.html" class="nav-link">📖 The Story</a></li>
         <li><a href="index.html" class="nav-link">📘 User Guide</a></li>
+        <li><a href="global-registry.html" class="nav-link">🌳 Global Registry <span class="nav-tag">v1.9</span></a></li>
         <li><a href="tokens.html" class="nav-link">🔤 Token Reference</a></li>
         <li><a href="examples.html" class="nav-link active">🍳 Enterprise Cookbook</a></li>
         <li><a href="playground.html" class="nav-link">🧪 Live Sandbox</a></li>
@@ -34,19 +39,25 @@
       </ul>
 
       <div class="sidebar-footer">
-        MIT &bull; KeshavSoft
+        Part of the <a href="https://github.com/keshavsoft" target="_blank">KeshavSoft</a> Ecosystem &bull; MIT
       </div>
     </aside>
 
     <main class="content">
-      <h1>Enterprise Cookbook <span class="badge">Recipes</span></h1>
-      <div class="lead">
-        Real-world JSON-to-DOM templates for form fields, cards, badges, and interactive controls.
+      <div class="hero">
+        <div class="hero-meta">
+          <span class="hero-tag">🍳 Production Recipes</span>
+          <span class="badge">Cookbook</span>
+        </div>
+        <h1>Enterprise <span class="gradient-text">Cookbook</span></h1>
+        <div class="lead">
+          Real-world JSON-to-DOM templates for input fields, action toolbars, cards, modals, and global tree consumers.
+        </div>
       </div>
 
-      <!-- RECIPE 1: FORM FIELD INPUT ROW -->
+      <!-- RECIPE 1: FORM INPUT ROW -->
       <h2>Recipe 1: Form Input Field with Validation State</h2>
-      <p>Binds dynamic labels, IDs, validation feedback, and placeholder text in a single pass:</p>
+      <p>Binds dynamic IDs, label text, feedback messages, and validation classes in a single pass:</p>
 
       <pre><code>import applyTemplate from "json-transformer-funcs-primitive";
 
@@ -98,7 +109,7 @@ const result = applyTemplate(fieldData, fieldTemplate);</code></pre>
   primaryClass: "btn btn-primary px-4",
   secondaryClass: "btn btn-outline-secondary",
   primaryAction: "Save Contact",
-  secondaryAction: "Discard"
+  secondaryAction: "Discard Changes"
 };
 
 const buttonTemplate = {
@@ -120,61 +131,78 @@ const buttonTemplate = {
 
 const result = applyTemplate(buttonData, buttonTemplate);</code></pre>
 
-      <!-- RECIPE 3: BOOTSTRAP 5 ACCORDION ITEM -->
-      <h2>Recipe 3: Bootstrap 5 Collapsible Accordion</h2>
-      <p>Interpolates multiple coupled IDs and target references across accordion triggers and bodies:</p>
+      <!-- RECIPE 3: STAT KPI CARD -->
+      <h2>Recipe 3: Dashboard KPI Stat Card with <code>${agg:count}</code></h2>
+      <p>Combines title metadata with automatic numeric calculation of pending rows:</p>
 
-      <pre><code>const accordionData = {
-  headingId: "headingOne",
-  collapseId: "collapseOne",
-  parentId: "mainAccordion",
-  title: "Step 1: Account Verification",
-  bodyText: "Please upload your government-issued ID to activate your account."
+      <pre><code>const kpiData = {
+  cardClass: "card shadow-sm border-0 h-100",
+  title: "Pending Claims",
+  badgeClass: "badge bg-danger rounded-pill",
+  noteText: "Requires immediate underwriting review",
+  rowData: [
+    { id: 101, user: "Alice" },
+    { id: 102, user: "Bob" },
+    { id: 103, user: "Charlie" },
+    { id: 104, user: "Diana" }
+  ]
 };
 
-const accordionTemplate = {
+const kpiTemplate = {
   tagName: "div",
-  attributes: { class: "accordion-item" },
+  attributes: { class: "${cardClass}" },
   children: [
     {
-      tagName: "h2",
-      attributes: { class: "accordion-header", id: "${headingId}" },
-      children: [
-        {
-          tagName: "button",
-          attributes: {
-            class: "accordion-button",
-            type: "button",
-            "data-bs-toggle": "collapse",
-            "data-bs-target": "#${collapseId}"
-          },
-          textContent: "${title}"
-        }
-      ]
-    },
-    {
       tagName: "div",
-      attributes: {
-        id: "${collapseId}",
-        class: "accordion-collapse collapse show",
-        "data-bs-parent": "#${parentId}"
-      },
+      attributes: { class: "card-body" },
       children: [
         {
           tagName: "div",
-          attributes: { class: "accordion-body" },
-          textContent: "${bodyText}"
-        }
+          attributes: { class: "d-flex justify-content-between align-items-center mb-2" },
+          children: [
+            { tagName: "h6", attributes: { class: "text-muted mb-0" }, textContent: "${title}" },
+            { tagName: "span", attributes: { class: "${badgeClass}" }, textContent: "${agg:count}" }
+          ]
+        },
+        { tagName: "p", attributes: { class: "small text-secondary mb-0" }, textContent: "${noteText}" }
       ]
     }
   ]
 };
 
-const result = applyTemplate(accordionData, accordionTemplate);</code></pre>
+const result = applyTemplate(kpiData, kpiTemplate);
+// result.children[0].children[0].children[1].textContent === 4</code></pre>
+
+      <!-- RECIPE 4: GLOBAL TREE CONSUMPTION -->
+      <h2>Recipe 4: Consuming via <code>window.ks.transformerFuncs.primitive</code></h2>
+      <p>
+        In microfrontend architectures, child remotes consume the shared primitive transformer from the host shell via the global tree:
+      </p>
+
+      <pre><code>// In a Microfrontend Remote:
+function renderRemoteCard(containerEl, model) {
+  // Discover host primitive engine:
+  const transformer = window.ks?.transformerFuncs?.primitive?.applyTemplate 
+    || window.ks?.applyTemplate;
+
+  if (!transformer) {
+    throw new Error("KeshavSoft primitive transformer not found on window.ks!");
+  }
+
+  const template = {
+    tagName: "div",
+    attributes: { class: "alert alert-${alertType}" },
+    textContent: "${alertMessage}"
+  };
+
+  const ast = transformer(model, template);
+  // ast is now ready for DOM hydration!
+  return ast;
+}</code></pre>
 
       <div class="page-nav">
         <a href="tokens.html">&larr; Back: Token Reference</a>
-        <a href="playground.html">Next: Live Sandbox Playground &rarr;</a>
+        <a href="playground.html">Next: Live Sandbox Studio &rarr;</a>
       </div>
     </main>
   </div>

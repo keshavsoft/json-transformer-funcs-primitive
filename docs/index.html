@@ -5,25 +5,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>json-transformer-funcs-primitive — The Story &amp; Documentation Portal</title>
   <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
 </head>
 <body>
   <div class="layout">
     <aside class="sidebar">
       <div class="sidebar-brand">
         <a href="index.html" class="brand-title">
-          <span>⚛️</span> primitive <span class="brand-badge">v1.8</span>
+          <span class="brand-logo">⚛️</span>
+          <span>primitive</span>
+          <span class="brand-badge">v1.9.0</span>
         </a>
         <div class="brand-subtitle">The JSON-to-DOM Atom</div>
       </div>
 
       <div class="nav-hub">
-        <a href="user/playground.html">🧪 <span>Live Sandbox</span></a>
+        <a href="user/playground.html"><span>🧪</span> <span>Live Sandbox &amp; Tree</span></a>
       </div>
 
       <div class="nav-label">Documentation</div>
       <ul class="nav-list">
         <li><a href="index.html" class="nav-link active">📖 The Story</a></li>
         <li><a href="user/index.html" class="nav-link">📘 User Guide</a></li>
+        <li><a href="user/global-registry.html" class="nav-link">🌳 Global Registry <span class="nav-tag">v1.9</span></a></li>
         <li><a href="user/tokens.html" class="nav-link">🔤 Token Reference</a></li>
         <li><a href="user/examples.html" class="nav-link">🍳 Enterprise Cookbook</a></li>
         <li><a href="user/playground.html" class="nav-link">🧪 Live Sandbox</a></li>
@@ -35,14 +39,40 @@
       </ul>
 
       <div class="sidebar-footer">
-        Part of the <a href="https://github.com/keshavsoft">KeshavSoft</a> Ecosystem &bull; MIT
+        Part of the <a href="https://github.com/keshavsoft" target="_blank">KeshavSoft</a> Ecosystem &bull; MIT
       </div>
     </aside>
 
     <main class="content">
-      <h1>The Atom of JSON-to-DOM <span class="badge">Architecture</span></h1>
-      <div class="lead">
-        One plain data object + one JSON-to-DOM template = one fully-resolved, immutable element AST.
+      <div class="hero">
+        <div class="hero-meta">
+          <span class="hero-tag">⚛️ The Atomic Core</span>
+          <span class="badge">Production Grade</span>
+        </div>
+        <h1>The Atom of <span class="gradient-text">JSON-to-DOM</span></h1>
+        <div class="lead">
+          One plain data dictionary + one JSON-to-DOM blueprint = one fully-resolved, immutable element AST.
+        </div>
+      </div>
+
+      <!-- STAT / METRICS BAR -->
+      <div class="stat-bar">
+        <div class="stat-card">
+          <div class="stat-value">0</div>
+          <div class="stat-label">External Dependencies</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">&lt; 0.1ms</div>
+          <div class="stat-label">Execution Latency</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">100%</div>
+          <div class="stat-label">AST Immutability</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">window.ks</div>
+          <div class="stat-label">Transformer Family Tree</div>
+        </div>
       </div>
 
       <!-- SECTION 1: THE BIG IDEA -->
@@ -79,6 +109,15 @@
             A brand new, structurally cloned AST with all slots filled. Zero side effects, complete immutability, executing in under 0.1ms.
           </div>
         </div>
+
+        <div class="concept-card">
+          <div class="concept-icon">🌲</div>
+          <div class="concept-title">4. Global Tree</div>
+          <div class="concept-role">window.ks &bull; Family Namespace</div>
+          <div class="concept-desc">
+            Automatically organized in <code>window.ks.transformerFuncs.primitive</code> with runtime metadata and version inspection.
+          </div>
+        </div>
       </div>
 
       <div class="note">
@@ -87,45 +126,53 @@
       </div>
 
       <!-- SECTION 2: THE 3-TIER ECOSYSTEM -->
-      <h2>2. Where Primitive Sits in the Ecosystem</h2>
+      <h2>2. Where Primitive Sits in the KeshavSoft Ecosystem</h2>
       <p>
         The KeshavSoft transformation architecture is organized into strict mathematical cardinalities:
       </p>
 
-      <table>
-        <thead>
-          <tr>
-            <th>Engine Package</th>
-            <th>Cardinality</th>
-            <th>Primary Function</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><code>json-transformer-funcs-primitive</code></td>
-            <td><strong>0D / Atom</strong> (1 &rarr; 1)</td>
-            <td>Fills dynamic values into a single element node template.</td>
-          </tr>
-          <tr>
-            <td><code>json-transformer-funcs-one-dimension</code></td>
-            <td><strong>1D / Linear</strong> (N &rarr; N)</td>
-            <td>Maps a collection of data objects across a row template.</td>
-          </tr>
-          <tr>
-            <td><code>json-transformer-funcs-two-dimensions</code></td>
-            <td><strong>2D / Matrix</strong> (M &times; N &rarr; Grid)</td>
-            <td>Transforms matrix data across columns and rows into a complete table.</td>
-          </tr>
-          <tr>
-            <td><code>json-renderers-build-form</code></td>
-            <td><strong>Application / Spec</strong></td>
-            <td>High-level form builder assembling cards, headers, bodies, and footers.</td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Engine Package</th>
+              <th>Cardinality</th>
+              <th>Primary Role</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>json-transformer-funcs-primitive</code></td>
+              <td><strong>0D / Atom</strong> (1 &rarr; 1)</td>
+              <td>Fills dynamic values into a single element node template.</td>
+              <td><span class="badge" style="background: rgba(52, 211, 153, 0.2); color: var(--green); border-color: var(--green);">v1.9.0 Active</span></td>
+            </tr>
+            <tr>
+              <td><code>json-transformer-funcs-one-dimension</code></td>
+              <td><strong>1D / Linear</strong> (N &rarr; N)</td>
+              <td>Maps a collection of data objects across a row template.</td>
+              <td><span class="badge">Ecosystem</span></td>
+            </tr>
+            <tr>
+              <td><code>json-transformer-funcs-two-dimensions</code></td>
+              <td><strong>2D / Matrix</strong> (M &times; N &rarr; Grid)</td>
+              <td>Transforms matrix data across columns and rows into a complete table.</td>
+              <td><span class="badge">Ecosystem</span></td>
+            </tr>
+            <tr>
+              <td><code>json-renderers-build-form</code></td>
+              <td><strong>Application / Spec</strong></td>
+              <td>High-level form builder assembling cards, headers, bodies, and footers.</td>
+              <td><span class="badge">Consumer</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
-      <!-- SECTION 3: THE CODE IN ACTION -->
+      <!-- SECTION 3: QUICK PEEK -->
       <h2>3. Quick Peek: How Simple It Is</h2>
+      <p>Using native ES Modules:</p>
       <pre><code>import applyTemplate from "json-transformer-funcs-primitive";
 
 const data = {
@@ -144,6 +191,12 @@ const template = {
 };
 
 const result = applyTemplate(data, template);</code></pre>
+
+      <p>Or directly in the browser via the new global family tree:</p>
+      <pre><code>// Direct shortcut or namespaced tree:
+const result = window.ks.applyTemplate(data, template);
+// or:
+const result = window.ks.transformerFuncs.primitive.applyTemplate(data, template);</code></pre>
 
       <div class="page-nav">
         <span></span>

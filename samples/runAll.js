@@ -60,6 +60,26 @@ try {
 if (!guard2Passed) throw new Error("Guard 2 (null inTemplate) Failed!");
 console.log("   ✓ Guard Validations passed.");
 
+// 5. Global registration verification (globalThis.ks tree)
+console.log("5. Testing Global Registration (window.ks / globalThis.ks)...");
+if (typeof globalThis.ks === "undefined") {
+  throw new Error("globalThis.ks was not initialized!");
+}
+if (typeof globalThis.ks.applyTemplate !== "function") {
+  throw new Error("globalThis.ks.applyTemplate is not a function!");
+}
+if (!globalThis.ks.transformerFuncs?.primitive?.applyTemplate) {
+  throw new Error("globalThis.ks.transformerFuncs.primitive is missing!");
+}
+if (globalThis.ks.transformerFuncs.primitive.meta.version !== "1.9.0") {
+  throw new Error("Meta version mismatch!");
+}
+const globalRun = globalThis.ks.applyTemplate({ test: "OK" }, { textContent: "${test}" });
+if (globalRun.textContent !== "OK") {
+  throw new Error("Execution via globalThis.ks failed!");
+}
+console.log("   ✓ Global Registration (globalThis.ks.applyTemplate & transformerFuncs tree) passed.");
+
 console.log("\n==================================================");
 console.log("🎉 ALL SAMPLES & VERIFICATIONS PASSED SUCCESSFULLY!");
 console.log("==================================================");

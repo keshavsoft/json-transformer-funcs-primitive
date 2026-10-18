@@ -1,10 +1,25 @@
 # json-transformer-funcs-primitive
 
-> **The Atom.** One data object + one JSON-to-DOM template = one fully-resolved element node.
+> **The Atom.** One data object + one JSON-to-DOM template = one fully-resolved, immutable element node.
 
 [![npm](https://img.shields.io/npm/v/json-transformer-funcs-primitive)](https://www.npmjs.com/package/json-transformer-funcs-primitive)
 [![license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![dependencies](https://img.shields.io/badge/dependencies-0-brightgreen.svg)]()
+[![tests](https://img.shields.io/badge/tests-passing-brightgreen.svg)]()
+
+---
+
+## 📚 Extreme Documentation Portal
+
+Experience the rich documentation portal and interactive in-browser playground:
+
+* 📖 [**The Story & Ecosystem**](docs/index.html) — Mental model of The Data & The Mold.
+* 📘 [**User Guide**](docs/user/index.html) — Contract signatures, guards, and parameter conventions.
+* 🌳 [**Global Registry & Family Tree**](docs/user/global-registry.html) — Deep architectural tour of `window.ks` and the non-destructive registrant.
+* 🔤 [**Token Reference**](docs/user/tokens.html) — Complete guide to `${key}`, multi-tokens, `${agg:count}`, and `${rowValue}`.
+* 🍳 [**Enterprise Cookbook**](docs/user/examples.html) — Real-world recipes for cards, form fields, button toolbars, and microfrontends.
+* 🧪 [**Live Interactive Studio**](docs/user/playground.html) — In-browser playground with live JSON AST generation, real-time DOM rendering, and live `window.ks` tree inspector!
+* 🛠️ [**Developer Internals**](docs/developer/index.html) — v9 pipeline architecture, `registerGlobal/`, `meta.js`, and recursive AST cloning.
 
 ---
 
@@ -30,7 +45,7 @@ Think of it this way:
                                  applyTemplate(...)
                                            │
                                            ▼
-                              Resolved Element JSON AST
+                               Resolved Element JSON AST
            { "tagName": "button", "attributes": { "class": "btn-primary" }, "textContent": "Save" }
 ```
 
@@ -44,7 +59,7 @@ Think of it this way:
 npm install json-transformer-funcs-primitive
 ```
 
-### Basic Example
+### Basic Example (ES Module)
 
 ```javascript
 import applyTemplate from "json-transformer-funcs-primitive";
@@ -81,6 +96,36 @@ console.log(element);
 
 ---
 
+## 🌲 Global Registry: The `window.ks` Family Tree
+
+Starting in **v1.9.0**, `json-transformer-funcs-primitive` automatically registers onto `globalThis.ks` (or `window.ks` in browsers) into a structured transformer family tree:
+
+```
+window.ks
+├── applyTemplate(inElement, inTemplate)            <-- Direct Shortcut
+├── transformerFuncs
+│   └── primitive                                    <-- Family Tree Branch
+│       ├── meta { name, version }
+│       └── applyTemplate
+└── ["json-transformer-funcs-primitive"]           <-- Package Key Lookup
+    ├── meta { name, version }
+    └── applyTemplate
+```
+
+### Consuming via the Tree:
+
+```javascript
+// 1. Direct shortcut
+const node = window.ks.applyTemplate(data, template);
+
+// 2. Family tree call with version metadata
+const { meta, applyTemplate } = window.ks.transformerFuncs.primitive;
+console.log(`Using ${meta.name} v${meta.version}`);
+const node = applyTemplate(data, template);
+```
+
+---
+
 ## 🔍 Function Signature
 
 ```javascript
@@ -107,10 +152,10 @@ The engine protects your pipeline with strict, non-negotiable guards (throwing `
 
 | Input Condition | Thrown Error | Rationale |
 | :--- | :--- | :--- |
-| `inTemplate === null` or `undefined` | `TypeError: inTemplate is required` | Prevents operating on missing blueprints. |
-| `typeof inTemplate !== "object"` and `!== "string"` | `TypeError: inTemplate must be an object or string` | Blueprint must be a valid AST or string. |
-| `!inElement` or `typeof inElement !== "object"` | `TypeError: inElement must be an object` | Data source must be a valid dictionary. |
-| `Array.isArray(inElement)` | `TypeError: inElement must be an object` | Arrays belong in 1D/2D mappers, not the primitive atom. |
+| `inTemplate === null` or `undefined` | `TypeError: inTemplate is undefined or null` | Prevents operating on missing blueprints. |
+| `typeof inTemplate !== "object"` and `!== "string"` | `TypeError: inTemplate is not an object or string` | Blueprint must be a valid AST or string. |
+| `!inElement` or `typeof inElement !== "object"` | `TypeError: inElement is not an object` | Data source must be a valid dictionary. |
+| `Array.isArray(inElement)` | `TypeError: inElement is an array` | Arrays belong in 1D/2D mappers, not the primitive atom. |
 
 ### Immutability Guarantee
 `applyTemplate` **never** mutates your original `inTemplate`. It immediately executes:
@@ -121,48 +166,13 @@ Guaranteeing complete immutability across repeated calls and shared caches.
 
 ---
 
-## 🧩 The 4 Resolution Engines
-
-`applyTemplate` recursively inspects the cloned template and dispatches to 4 specialized handlers:
-
-### 1. `commonReplace` (String Token Replacement)
-Scans any string using the regex `/\$\{(\w+)\}/g`.
-- If `inElement[key]` exists, replaces `${key}` with its value.
-- If undefined, preserves `${key}` untouched for downstream passes.
-- Can replace multiple placeholders within the same attribute (e.g. `class="${baseClass} ${activeClass}"`).
-
-### 2. `forAttributes` (Attribute Map Resolution)
-Iterates through all key-value pairs of `template.attributes`:
-```javascript
-for (const [key, value] of Object.entries(inAttributes)) {
-    newObject[key] = parentIndex(inSource, value);
-}
-```
-Attribute values can be plain strings or nested objects; both are resolved recursively.
-
-### 3. `forTextContent` (Text Content Resolution)
-Resolves inner text of tags via `commonReplace`, supporting both inline strings and dynamic bindings.
-
-### 4. `forChildren` (Recursive Tree Resolution)
-Recursively maps over `template.children`, preserving parent-child DOM hierarchy:
-```javascript
-const newChildren = localTemplateChildren.map(element => {
-    return parentIndex(inElement, element);
-});
-```
-
----
-
 ## 🌟 Special Built-in Tokens
-
-`json-transformer-funcs-primitive` includes two specialized enterprise tokens designed for table and list aggregation:
 
 ### 1. `${agg:count}` (Numeric Row Counter)
 When `inTemplate` is exactly `"${agg:count}"` and `inElement.rowData` is an Array, the engine returns the **numeric length** of the array rather than a string:
 
 ```javascript
 const data = {
-  label: "Active Users",
   rowData: ["Alice", "Bob", "Charlie", "Diana"]
 };
 
@@ -186,72 +196,6 @@ const data = {
 
 const result = applyTemplate(data, "${rowValue}");
 // result === { id: 101, sku: "A-992", stock: 45 }
-```
-
----
-
-## 📚 Real-World Recipes
-
-### Recipe 1: Complex Nested Component (Card with Header & Actions)
-
-```javascript
-import applyTemplate from "json-transformer-funcs-primitive";
-
-const componentData = {
-  cardClass: "card shadow-sm border-0",
-  headerClass: "card-header bg-transparent d-flex justify-content-between align-items-center",
-  title: "Account Settings",
-  badgeClass: "badge text-bg-success",
-  badgeText: "Verified",
-  bodyClass: "card-body",
-  description: "Manage your security settings and notifications.",
-  buttonClass: "btn btn-primary px-4",
-  buttonText: "Save Changes"
-};
-
-const componentTemplate = {
-  tagName: "div",
-  attributes: {
-    class: "${cardClass}",
-    "data-role": "card-root"
-  },
-  children: [
-    {
-      tagName: "div",
-      attributes: { class: "${headerClass}" },
-      children: [
-        {
-          tagName: "h5",
-          attributes: { class: "card-title mb-0" },
-          textContent: "${title}"
-        },
-        {
-          tagName: "span",
-          attributes: { class: "${badgeClass}" },
-          textContent: "${badgeText}"
-        }
-      ]
-    },
-    {
-      tagName: "div",
-      attributes: { class: "${bodyClass}" },
-      children: [
-        {
-          tagName: "p",
-          attributes: { class: "card-text text-muted" },
-          textContent: "${description}"
-        },
-        {
-          tagName: "button",
-          attributes: { type: "button", class: "${buttonClass}" },
-          textContent: "${buttonText}"
-        }
-      ]
-    }
-  ]
-};
-
-const cardAst = applyTemplate(componentData, componentTemplate);
 ```
 
 ---
