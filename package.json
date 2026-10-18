@@ -1,6 +1,6 @@
 {
   "name": "json-transformer-funcs-primitive",
-  "version": "1.8.1",
+  "version": "1.8.2",
   "description": "Primitive template interpolation engine for json-transformer-funcs",
   "main": "./src/index.js",
   "module": "./src/index.js",
@@ -11,8 +11,13 @@
       "default": "./src/index.js"
     }
   },
+  "scripts": {
+    "test": "node samples/runAll.js"
+  },
   "files": [
     "src",
+    "docs",
+    "samples",
     "README.md"
   ],
   "repository": {
@@ -23,7 +28,9 @@
     "json-transformer-funcs",
     "primitive",
     "template",
-    "applyTemplate"
+    "applyTemplate",
+    "json-to-dom",
+    "interpolation"
   ],
   "author": "KeshavSoft",
   "license": "MIT",

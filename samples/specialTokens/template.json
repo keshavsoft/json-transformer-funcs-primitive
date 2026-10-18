@@ -1,0 +1,18 @@
+{
+  "tagName": "div",
+  "attributes": {
+    "data-role": "summary-box"
+  },
+  "children": [
+    {
+      "tagName": "span",
+      "attributes": { "class": "fw-bold" },
+      "textContent": "${label}: "
+    },
+    {
+      "tagName": "span",
+      "attributes": { "class": "badge bg-info text-dark" },
+      "textContent": "${agg:count}"
+    }
+  ]
+}

@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Developer Guide — json-transformer-funcs-primitive</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <a href="../index.html" class="brand-title">
+          <span>⚛️</span> primitive <span class="brand-badge">v1.8</span>
+        </a>
+        <div class="brand-subtitle">Developer Guide</div>
+      </div>
+
+      <div class="nav-hub">
+        <a href="../index.html">&larr; Back to Portal</a>
+      </div>
+
+      <div class="nav-label">Documentation</div>
+      <ul class="nav-list">
+        <li><a href="../user/index.html" class="nav-link">📘 User Guide</a></li>
+        <li><a href="../user/tokens.html" class="nav-link">🔤 Token Reference</a></li>
+        <li><a href="../user/examples.html" class="nav-link">🍳 Enterprise Cookbook</a></li>
+        <li><a href="../user/playground.html" class="nav-link">🧪 Live Sandbox</a></li>
+      </ul>
+
+      <div class="nav-label">Architecture</div>
+      <ul class="nav-list">
+        <li><a href="index.html" class="nav-link active">🛠️ Developer Internals</a></li>
+      </ul>
+
+      <div class="sidebar-footer">
+        MIT &bull; KeshavSoft
+      </div>
+    </aside>
+
+    <main class="content">
+      <h1>Developer Guide <span class="badge">Engine Internals</span></h1>
+      <div class="lead">
+        A deep architectural tour of the v8 engine pipeline, guard guarantees, and recursive tree resolution.
+      </div>
+
+      <!-- SECTION 1: ARCHITECTURE MAP -->
+      <h2>1. The 5-Module Pipeline</h2>
+      <p>
+        The engine is structured into five single-responsibility modules inside <code>src/v8/</code>:
+      </p>
+
+      ```
+                              startFunc(inElement, inTemplate)
+                                             │
+                                             ▼
+                                  guardFunc(guard.js)
+                                             │
+                                             ▼
+                               structuredClone(inTemplate)
+                                             │
+                     ┌───────────────────────┼───────────────────────┐
+                     ▼                       ▼                       ▼
+               forAttributes           forTextContent           forChildren
+                     │                       │                       │
+                     └───────────────────────┼───────────────────────┘
+                                             ▼
+                               commonReplace(commonReplace.js)
+                                             │
+                                             ▼
+                                    Resolved JSON AST
+      ```
+
+      <!-- SECTION 2: MODULE WALKTHROUGH -->
+      <h2>2. Module Breakdown</h2>
+
+      <h3>A. <code>guard/guard.js</code> &bull; The Gatekeeper</h3>
+      <p>
+        Validates arguments prior to execution. If <code>inTemplate</code> is null, undefined, or a non-object primitive, or if <code>inElement</code> is an array or non-object, it halts immediately with a descriptive <code>TypeError</code>.
+      </p>
+
+      <h3>B. <code>src/v8/index.js</code> &bull; The Orchestrator</h3>
+      <p>
+        Immediately assigns inputs to <code>localElement</code> and <code>localTemplate</code> (respecting the KeshavSoft <code>in</code>/<code>local</code> parameter convention). It deep clones the template via <code>structuredClone</code> and dispatches:
+      </p>
+      <ul>
+        <li>If string &rarr; calls <code>commonReplace</code>.</li>
+        <li>If <code>textContent</code> exists &rarr; calls <code>forTextContent</code>.</li>
+        <li>If <code>attributes</code> exists &rarr; calls <code>forAttributes</code>.</li>
+        <li>If <code>children</code> exists &rarr; calls <code>forChildren</code>.</li>
+      </ul>
+
+      <h3>C. <code>commonReplace.js</code> &bull; The Interpolation Core</h3>
+      <p>
+        Executes regular expression replacement on string values:
+      </p>
+      <pre><code>inStringTemplate.replace(/\$\{(\w+)\}/g, (match, key) => {
+    return inElement[key] !== undefined ? inElement[key] : match;
+});</code></pre>
+      <p>
+        Additionally handles the two specialized token short-circuits:
+      </p>
+      <ul>
+        <li><code>${agg:count}</code>: Returns numeric count from <code>inElement.rowData.length</code>.</li>
+        <li><code>${rowValue}</code>: Returns raw value from <code>inElement.rowData</code>.</li>
+      </ul>
+
+      <h3>D. <code>forAttributes/index.js</code> &bull; Attribute Walker</h3>
+      <p>
+        Iterates over the <code>attributes</code> key-value dictionary and recursively calls the orchestrator for each value. This ensures nested attributes or complex attribute configs resolve cleanly.
+      </p>
+
+      <h3>E. <code>forChildren/index.js</code> &bull; Recursive Child Mapper</h3>
+      <p>
+        Iterates over the <code>children</code> array:
+      </p>
+      <pre><code>const newChildren = localTemplateChildren.map(element => {
+    return parentIndex(inElement, element);
+});</code></pre>
+
+      <!-- SECTION 3: TEST SUITE -->
+      <h2>3. Test Verification Suite</h2>
+      <p>
+        To run the complete verification suite verifying single elements, nested card structures, special tokens, and all guard assertions:
+      </p>
+      <pre><code>npm test</code></pre>
+
+      <div class="page-nav">
+        <a href="../user/playground.html">&larr; Back: Live Sandbox</a>
+        <a href="../index.html">Back to Main Portal &rarr;</a>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

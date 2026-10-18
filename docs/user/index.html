@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>User Guide — json-transformer-funcs-primitive</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <a href="../index.html" class="brand-title">
+          <span>⚛️</span> primitive <span class="brand-badge">v1.8</span>
+        </a>
+        <div class="brand-subtitle">User Guide</div>
+      </div>
+
+      <div class="nav-hub">
+        <a href="../index.html">&larr; Back to Portal</a>
+      </div>
+
+      <div class="nav-label">User Documentation</div>
+      <ul class="nav-list">
+        <li><a href="index.html" class="nav-link active">📘 User Guide</a></li>
+        <li><a href="tokens.html" class="nav-link">🔤 Token Reference</a></li>
+        <li><a href="examples.html" class="nav-link">🍳 Enterprise Cookbook</a></li>
+        <li><a href="playground.html" class="nav-link">🧪 Live Sandbox</a></li>
+      </ul>
+
+      <div class="nav-label">Architecture</div>
+      <ul class="nav-list">
+        <li><a href="../developer/index.html" class="nav-link">🛠️ Developer Internals</a></li>
+      </ul>
+
+      <div class="sidebar-footer">
+        MIT &bull; KeshavSoft
+      </div>
+    </aside>
+
+    <main class="content">
+      <h1>User Guide <span class="badge">API &amp; Usage</span></h1>
+      <div class="lead">
+        Learn how to configure data dictionaries, author templates, and leverage pure token interpolation.
+      </div>
+
+      <!-- SECTION 1: SIGNATURE -->
+      <h2>1. The Function Contract</h2>
+      <pre><code>import applyTemplate from "json-transformer-funcs-primitive";
+
+const resolved = applyTemplate(inElement, inTemplate, showLog);</code></pre>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Argument</th>
+            <th>Type</th>
+            <th>Obligation</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>inElement</code></td>
+            <td><code>Plain Object</code></td>
+            <td><strong>Required</strong></td>
+            <td>A dictionary of keys and values used to replace matching <code>${key}</code> tokens.</td>
+          </tr>
+          <tr>
+            <td><code>inTemplate</code></td>
+            <td><code>Object | String</code></td>
+            <td><strong>Required</strong></td>
+            <td>The JSON-to-DOM AST node or string template containing <code>${placeholder}</code> slots.</td>
+          </tr>
+          <tr>
+            <td><code>showLog</code></td>
+            <td><code>Boolean</code></td>
+            <td>Optional</td>
+            <td>When <code>true</code>, outputs debugging telemetry to <code>console.log</code>.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- SECTION 2: GUARDS -->
+      <h2>2. Guard Rails &amp; Exceptions</h2>
+      <p>
+        The primitive engine enforces strict typing at the boundary to eliminate silent failures downstream.
+        The following table lists the guard checks executed before any parsing occurs:
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Input Condition</th>
+            <th>Error Thrown</th>
+            <th>Design Reason</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>inTemplate === null || undefined</code></td>
+            <td><code>TypeError: inTemplate is required</code></td>
+            <td>Cannot interpolate into an empty or unprovided template.</td>
+          </tr>
+          <tr>
+            <td><code>typeof inTemplate !== "object" &amp;&amp; !== "string"</code></td>
+            <td><code>TypeError: inTemplate must be an object or string</code></td>
+            <td>Primitives like numbers or booleans cannot serve as templates.</td>
+          </tr>
+          <tr>
+            <td><code>!inElement || typeof inElement !== "object"</code></td>
+            <td><code>TypeError: inElement must be an object</code></td>
+            <td>Data values must be supplied as a lookup dictionary.</td>
+          </tr>
+          <tr>
+            <td><code>Array.isArray(inElement)</code></td>
+            <td><code>TypeError: inElement must be an object</code></td>
+            <td>Primitive takes 1 object. Arrays must be processed by the 1D engine.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- SECTION 3: IMMUTABILITY -->
+      <h2>3. Absolute Immutability</h2>
+      <p>
+        A core invariant of the KeshavSoft ecosystem is that <strong>templates must remain untouchable</strong>.
+        When you run:
+      </p>
+      <pre><code>const result = applyTemplate(data, template);</code></pre>
+      <p>
+        The engine calls <code>structuredClone(localTemplate)</code> upfront.
+        Your original template reference is never altered in memory, allowing you to reuse the exact same template across thousands of rows or requests safely without cache pollution.
+      </p>
+
+      <div class="page-nav">
+        <a href="../index.html">&larr; Back: The Story</a>
+        <a href="tokens.html">Next: Token Reference &rarr;</a>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

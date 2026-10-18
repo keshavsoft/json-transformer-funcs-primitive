@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Enterprise Cookbook — json-transformer-funcs-primitive</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <a href="../index.html" class="brand-title">
+          <span>⚛️</span> primitive <span class="brand-badge">v1.8</span>
+        </a>
+        <div class="brand-subtitle">Cookbook</div>
+      </div>
+
+      <div class="nav-hub">
+        <a href="../index.html">&larr; Back to Portal</a>
+      </div>
+
+      <div class="nav-label">User Documentation</div>
+      <ul class="nav-list">
+        <li><a href="index.html" class="nav-link">📘 User Guide</a></li>
+        <li><a href="tokens.html" class="nav-link">🔤 Token Reference</a></li>
+        <li><a href="examples.html" class="nav-link active">🍳 Enterprise Cookbook</a></li>
+        <li><a href="playground.html" class="nav-link">🧪 Live Sandbox</a></li>
+      </ul>
+
+      <div class="nav-label">Architecture</div>
+      <ul class="nav-list">
+        <li><a href="../developer/index.html" class="nav-link">🛠️ Developer Internals</a></li>
+      </ul>
+
+      <div class="sidebar-footer">
+        MIT &bull; KeshavSoft
+      </div>
+    </aside>
+
+    <main class="content">
+      <h1>Enterprise Cookbook <span class="badge">Recipes</span></h1>
+      <div class="lead">
+        Real-world JSON-to-DOM templates for form fields, cards, badges, and interactive controls.
+      </div>
+
+      <!-- RECIPE 1: FORM FIELD INPUT ROW -->
+      <h2>Recipe 1: Form Input Field with Validation State</h2>
+      <p>Binds dynamic labels, IDs, validation feedback, and placeholder text in a single pass:</p>
+
+      <pre><code>import applyTemplate from "json-transformer-funcs-primitive";
+
+const fieldData = {
+  fieldId: "user-email",
+  fieldName: "email",
+  fieldLabel: "Corporate Email Address",
+  placeholderText: "name@company.com",
+  inputClass: "form-control is-valid",
+  feedbackClass: "valid-feedback",
+  feedbackText: "Looks good!"
+};
+
+const fieldTemplate = {
+  tagName: "div",
+  attributes: { class: "mb-3" },
+  children: [
+    {
+      tagName: "label",
+      attributes: { for: "${fieldId}", class: "form-label fw-semibold" },
+      textContent: "${fieldLabel}"
+    },
+    {
+      tagName: "input",
+      attributes: {
+        type: "email",
+        id: "${fieldId}",
+        name: "${fieldName}",
+        class: "${inputClass}",
+        placeholder: "${placeholderText}"
+      }
+    },
+    {
+      tagName: "div",
+      attributes: { class: "${feedbackClass}" },
+      textContent: "${feedbackText}"
+    }
+  ]
+};
+
+const result = applyTemplate(fieldData, fieldTemplate);</code></pre>
+
+      <!-- RECIPE 2: ACTION BUTTON GROUP -->
+      <h2>Recipe 2: Dynamic Action Button Group</h2>
+      <p>Demonstrates how one data dictionary simultaneously themes primary and secondary actions:</p>
+
+      <pre><code>const buttonData = {
+  wrapperClass: "btn-group shadow-sm",
+  primaryClass: "btn btn-primary px-4",
+  secondaryClass: "btn btn-outline-secondary",
+  primaryAction: "Save Contact",
+  secondaryAction: "Discard"
+};
+
+const buttonTemplate = {
+  tagName: "div",
+  attributes: { class: "${wrapperClass}", role: "group" },
+  children: [
+    {
+      tagName: "button",
+      attributes: { type: "submit", class: "${primaryClass}" },
+      textContent: "${primaryAction}"
+    },
+    {
+      tagName: "button",
+      attributes: { type: "button", class: "${secondaryClass}" },
+      textContent: "${secondaryAction}"
+    }
+  ]
+};
+
+const result = applyTemplate(buttonData, buttonTemplate);</code></pre>
+
+      <!-- RECIPE 3: BOOTSTRAP 5 ACCORDION ITEM -->
+      <h2>Recipe 3: Bootstrap 5 Collapsible Accordion</h2>
+      <p>Interpolates multiple coupled IDs and target references across accordion triggers and bodies:</p>
+
+      <pre><code>const accordionData = {
+  headingId: "headingOne",
+  collapseId: "collapseOne",
+  parentId: "mainAccordion",
+  title: "Step 1: Account Verification",
+  bodyText: "Please upload your government-issued ID to activate your account."
+};
+
+const accordionTemplate = {
+  tagName: "div",
+  attributes: { class: "accordion-item" },
+  children: [
+    {
+      tagName: "h2",
+      attributes: { class: "accordion-header", id: "${headingId}" },
+      children: [
+        {
+          tagName: "button",
+          attributes: {
+            class: "accordion-button",
+            type: "button",
+            "data-bs-toggle": "collapse",
+            "data-bs-target": "#${collapseId}"
+          },
+          textContent: "${title}"
+        }
+      ]
+    },
+    {
+      tagName: "div",
+      attributes: {
+        id: "${collapseId}",
+        class: "accordion-collapse collapse show",
+        "data-bs-parent": "#${parentId}"
+      },
+      children: [
+        {
+          tagName: "div",
+          attributes: { class: "accordion-body" },
+          textContent: "${bodyText}"
+        }
+      ]
+    }
+  ]
+};
+
+const result = applyTemplate(accordionData, accordionTemplate);</code></pre>
+
+      <div class="page-nav">
+        <a href="tokens.html">&larr; Back: Token Reference</a>
+        <a href="playground.html">Next: Live Sandbox Playground &rarr;</a>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

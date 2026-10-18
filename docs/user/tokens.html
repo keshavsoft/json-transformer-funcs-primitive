@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Token Reference — json-transformer-funcs-primitive</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <a href="../index.html" class="brand-title">
+          <span>⚛️</span> primitive <span class="brand-badge">v1.8</span>
+        </a>
+        <div class="brand-subtitle">Token Reference</div>
+      </div>
+
+      <div class="nav-hub">
+        <a href="../index.html">&larr; Back to Portal</a>
+      </div>
+
+      <div class="nav-label">User Documentation</div>
+      <ul class="nav-list">
+        <li><a href="index.html" class="nav-link">📘 User Guide</a></li>
+        <li><a href="tokens.html" class="nav-link active">🔤 Token Reference</a></li>
+        <li><a href="examples.html" class="nav-link">🍳 Enterprise Cookbook</a></li>
+        <li><a href="playground.html" class="nav-link">🧪 Live Sandbox</a></li>
+      </ul>
+
+      <div class="nav-label">Architecture</div>
+      <ul class="nav-list">
+        <li><a href="../developer/index.html" class="nav-link">🛠️ Developer Internals</a></li>
+      </ul>
+
+      <div class="sidebar-footer">
+        MIT &bull; KeshavSoft
+      </div>
+    </aside>
+
+    <main class="content">
+      <h1>Token Reference <span class="badge">Syntax &amp; Rules</span></h1>
+      <div class="lead">
+        Comprehensive guide to standard tokens, multi-token interpolation, and built-in special tokens.
+      </div>
+
+      <!-- SECTION 1: STANDARD TOKENS -->
+      <h2>1. Standard Tokens: <code>${key}</code></h2>
+      <p>
+        The engine evaluates placeholders using regular expression matching: <code>/\$\{(\w+)\}/g</code>.
+        Whenever a key inside <code>${key}</code> exists in the supplied data object (<code>inElement[key] !== undefined</code>), the token is replaced with its string representation.
+      </p>
+
+      <h3>Multiple Tokens in One String</h3>
+      <p>A single attribute or text string can contain multiple placeholders:</p>
+      <pre><code>const data = {
+  colWidth: "col-md-6",
+  spacing: "mb-3",
+  align: "text-center"
+};
+
+const template = {
+  tagName: "div",
+  attributes: {
+    class: "${colWidth} ${spacing} ${align}"
+  }
+};
+
+const result = applyTemplate(data, template);
+// result.attributes.class === "col-md-6 mb-3 text-center"</code></pre>
+
+      <div class="note">
+        <strong>Unmatched Token Invariant:</strong>
+        If a token does not exist in <code>inElement</code> (is <code>undefined</code>), the token is left as-is (e.g. <code>${unknownKey}</code>).
+        This allows multi-pass transformations where later pipelines can fill in downstream tokens!
+      </div>
+
+      <!-- SECTION 2: SPECIAL ENTERPRISE TOKENS -->
+      <h2>2. Special Built-in Tokens</h2>
+      <p>
+        For enterprise tables and summary cards, the engine provides two native tokens that return typed values:
+      </p>
+
+      <h3>A. <code>${agg:count}</code> &bull; Numeric Count</h3>
+      <p>
+        When a string template is exactly <code>"${agg:count}"</code> and <code>inElement.rowData</code> is an Array, the engine returns the <strong>numeric length</strong> of the array (not a string).
+      </p>
+      <pre><code>const data = {
+  rowData: ["Order 1", "Order 2", "Order 3"]
+};
+
+const template = {
+  tagName: "span",
+  attributes: { class: "badge bg-info" },
+  textContent: "${agg:count}"
+};
+
+const result = applyTemplate(data, template);
+// result.textContent === 3 (typeof number)</code></pre>
+
+      <h3>B. <code>${rowValue}</code> &bull; Raw Object Extraction</h3>
+      <p>
+        When a template is exactly <code>"${rowValue}"</code> and <code>inElement.rowData</code> exists, the engine returns the <strong>raw value</strong> directly, even if it is a complex nested object or array:
+      </p>
+      <pre><code>const data = {
+  rowData: { id: 101, name: "Product A", price: 29.99 }
+};
+
+const result = applyTemplate(data, "${rowValue}");
+// result === { id: 101, name: "Product A", price: 29.99 }</code></pre>
+
+      <!-- SECTION 3: RESOLUTION TARGETS -->
+      <h2>3. Where Tokens Can Be Placed</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Target</th>
+            <th>Supported Syntax</th>
+            <th>Engine Behavior</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>attributes</code></td>
+            <td><code>class="${cardClass}"</code>, <code>id="${formId}"</code>, <code>data-*</code></td>
+            <td>Recursively walks all attribute keys and values. Supports nested attribute objects.</td>
+          </tr>
+          <tr>
+            <td><code>textContent</code></td>
+            <td><code>"Welcome, ${name}!"</code></td>
+            <td>Interpolates the inner text of tags.</td>
+          </tr>
+          <tr>
+            <td><code>children</code></td>
+            <td>Nested array of tags</td>
+            <td>Recursively executes <code>applyTemplate</code> down the entire branch.</td>
+          </tr>
+          <tr>
+            <td>Root String</td>
+            <td><code>applyTemplate(data, "${myToken}")</code></td>
+            <td>Returns interpolated string directly without requiring a wrapper object.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="page-nav">
+        <a href="index.html">&larr; Back: User Guide</a>
+        <a href="examples.html">Next: Enterprise Cookbook &rarr;</a>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

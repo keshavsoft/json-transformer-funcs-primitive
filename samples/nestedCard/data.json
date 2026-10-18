@@ -1,0 +1,11 @@
+{
+  "cardClass": "card shadow-sm border-0",
+  "headerClass": "card-header bg-transparent d-flex justify-content-between align-items-center",
+  "title": "Account Settings",
+  "badgeClass": "badge text-bg-success",
+  "badgeText": "Verified",
+  "bodyClass": "card-body",
+  "description": "Manage your security settings and notifications.",
+  "buttonClass": "btn btn-primary px-4",
+  "buttonText": "Save Changes"
+}

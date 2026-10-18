@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>json-transformer-funcs-primitive — The Story &amp; Documentation Portal</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <a href="index.html" class="brand-title">
+          <span>⚛️</span> primitive <span class="brand-badge">v1.8</span>
+        </a>
+        <div class="brand-subtitle">The JSON-to-DOM Atom</div>
+      </div>
+
+      <div class="nav-hub">
+        <a href="user/playground.html">🧪 <span>Live Sandbox</span></a>
+      </div>
+
+      <div class="nav-label">Documentation</div>
+      <ul class="nav-list">
+        <li><a href="index.html" class="nav-link active">📖 The Story</a></li>
+        <li><a href="user/index.html" class="nav-link">📘 User Guide</a></li>
+        <li><a href="user/tokens.html" class="nav-link">🔤 Token Reference</a></li>
+        <li><a href="user/examples.html" class="nav-link">🍳 Enterprise Cookbook</a></li>
+        <li><a href="user/playground.html" class="nav-link">🧪 Live Sandbox</a></li>
+      </ul>
+
+      <div class="nav-label">Architecture</div>
+      <ul class="nav-list">
+        <li><a href="developer/index.html" class="nav-link">🛠️ Developer Internals</a></li>
+      </ul>
+
+      <div class="sidebar-footer">
+        Part of the <a href="https://github.com/keshavsoft">KeshavSoft</a> Ecosystem &bull; MIT
+      </div>
+    </aside>
+
+    <main class="content">
+      <h1>The Atom of JSON-to-DOM <span class="badge">Architecture</span></h1>
+      <div class="lead">
+        One plain data object + one JSON-to-DOM template = one fully-resolved, immutable element AST.
+      </div>
+
+      <!-- SECTION 1: THE BIG IDEA -->
+      <h2>1. The Mental Model: The Data &amp; The Mold</h2>
+      <p>
+        In modern headless web engineering, user interfaces should not be assembled through brittle string concatenation or manual DOM mutations.
+        Instead, UI components are declared as clean, serializable JSON abstract syntax trees (ASTs).
+      </p>
+
+      <div class="concept-grid">
+        <div class="concept-card">
+          <div class="concept-icon">🏺</div>
+          <div class="concept-title">1. The Mold</div>
+          <div class="concept-role">inTemplate &bull; The Blueprint</div>
+          <div class="concept-desc">
+            A static JSON specification of the element node. Contains <code>${placeholder}</code> slots in attributes, textContent, or nested children.
+          </div>
+        </div>
+
+        <div class="concept-card">
+          <div class="concept-icon">💧</div>
+          <div class="concept-title">2. The Filling</div>
+          <div class="concept-role">inElement &bull; The Data</div>
+          <div class="concept-desc">
+            A plain dictionary of dynamic values (CSS classnames, IDs, labels, row data) passed in at execution time.
+          </div>
+        </div>
+
+        <div class="concept-card">
+          <div class="concept-icon">✨</div>
+          <div class="concept-title">3. The Formed Node</div>
+          <div class="concept-role">applyTemplate &bull; The Result</div>
+          <div class="concept-desc">
+            A brand new, structurally cloned AST with all slots filled. Zero side effects, complete immutability, executing in under 0.1ms.
+          </div>
+        </div>
+      </div>
+
+      <div class="note">
+        <strong>The Primitive Principle:</strong>
+        <code>applyTemplate</code> is the atomic unit of the entire transformation pipeline. It does not iterate over external arrays or reshape database schemas. It operates purely at the single-element boundary: <em>one dictionary fills one template</em>.
+      </div>
+
+      <!-- SECTION 2: THE 3-TIER ECOSYSTEM -->
+      <h2>2. Where Primitive Sits in the Ecosystem</h2>
+      <p>
+        The KeshavSoft transformation architecture is organized into strict mathematical cardinalities:
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Engine Package</th>
+            <th>Cardinality</th>
+            <th>Primary Function</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>json-transformer-funcs-primitive</code></td>
+            <td><strong>0D / Atom</strong> (1 &rarr; 1)</td>
+            <td>Fills dynamic values into a single element node template.</td>
+          </tr>
+          <tr>
+            <td><code>json-transformer-funcs-one-dimension</code></td>
+            <td><strong>1D / Linear</strong> (N &rarr; N)</td>
+            <td>Maps a collection of data objects across a row template.</td>
+          </tr>
+          <tr>
+            <td><code>json-transformer-funcs-two-dimensions</code></td>
+            <td><strong>2D / Matrix</strong> (M &times; N &rarr; Grid)</td>
+            <td>Transforms matrix data across columns and rows into a complete table.</td>
+          </tr>
+          <tr>
+            <td><code>json-renderers-build-form</code></td>
+            <td><strong>Application / Spec</strong></td>
+            <td>High-level form builder assembling cards, headers, bodies, and footers.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- SECTION 3: THE CODE IN ACTION -->
+      <h2>3. Quick Peek: How Simple It Is</h2>
+      <pre><code>import applyTemplate from "json-transformer-funcs-primitive";
+
+const data = {
+  cardClass: "card shadow-sm border-0",
+  title: "User Profile",
+  buttonClass: "btn btn-primary"
+};
+
+const template = {
+  tagName: "div",
+  attributes: { class: "${cardClass}" },
+  children: [
+    { tagName: "h4", textContent: "${title}" },
+    { tagName: "button", attributes: { class: "${buttonClass}" }, textContent: "Edit" }
+  ]
+};
+
+const result = applyTemplate(data, template);</code></pre>
+
+      <div class="page-nav">
+        <span></span>
+        <a href="user/index.html">Next: Read the User Guide &rarr;</a>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

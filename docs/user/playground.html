@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Live Sandbox — json-transformer-funcs-primitive</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <a href="../index.html" class="brand-title">
+          <span>⚛️</span> primitive <span class="brand-badge">v1.8</span>
+        </a>
+        <div class="brand-subtitle">Live Sandbox</div>
+      </div>
+
+      <div class="nav-hub">
+        <a href="../index.html">&larr; Back to Portal</a>
+      </div>
+
+      <div class="nav-label">User Documentation</div>
+      <ul class="nav-list">
+        <li><a href="index.html" class="nav-link">📘 User Guide</a></li>
+        <li><a href="tokens.html" class="nav-link">🔤 Token Reference</a></li>
+        <li><a href="examples.html" class="nav-link">🍳 Enterprise Cookbook</a></li>
+        <li><a href="playground.html" class="nav-link active">🧪 Live Sandbox</a></li>
+      </ul>
+
+      <div class="nav-label">Architecture</div>
+      <ul class="nav-list">
+        <li><a href="../developer/index.html" class="nav-link">🛠️ Developer Internals</a></li>
+      </ul>
+
+      <div class="sidebar-footer">
+        MIT &bull; KeshavSoft
+      </div>
+    </aside>
+
+    <main class="content">
+      <h1>Live In-Browser Sandbox <span class="badge">Interactive</span></h1>
+      <div class="lead">
+        Test templates, data objects, and token replacement live with instant client-side execution.
+      </div>
+
+      <div class="playground-section">
+        <div class="playground-header">
+          <div class="playground-title">
+            <span>🧪</span> Primitive Template Studio
+          </div>
+          <div class="preset-controls">
+            <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">Preset:</span>
+            <select id="presetSelect" class="preset-select">
+              <option value="card">Bootstrap 5 Card</option>
+              <option value="formField">Form Input Row</option>
+              <option value="buttonGroup">Action Button Group</option>
+              <option value="countToken">Special Token: ${agg:count}</option>
+              <option value="rowValueToken">Special Token: ${rowValue}</option>
+            </select>
+            <button id="runBtn" class="btn"><span>▶</span> Run</button>
+            <button id="copyBtn" class="btn btn-secondary"><span>📋</span> Copy Output</button>
+          </div>
+        </div>
+
+        <div class="playground-grid">
+          <!-- PANE 1: DATA -->
+          <div class="pane">
+            <div class="pane-header">
+              1. inElement (Data Dictionary)
+            </div>
+            <textarea id="dataEditor" class="pane-editor" spellcheck="false"></textarea>
+          </div>
+
+          <!-- PANE 2: TEMPLATE -->
+          <div class="pane">
+            <div class="pane-header">
+              2. inTemplate (The Mold)
+            </div>
+            <textarea id="templateEditor" class="pane-editor" spellcheck="false"></textarea>
+          </div>
+
+          <!-- PANE 3: RESULT -->
+          <div class="pane">
+            <div class="pane-header">
+              3. Resolved Element AST
+            </div>
+            <textarea id="resultEditor" class="pane-editor readonly" readonly spellcheck="false"></textarea>
+          </div>
+        </div>
+
+        <div class="status-bar">
+          <div class="status-indicator">
+            <div id="statusDot" class="status-dot"></div>
+            <span id="statusText">Engine Ready &bull; Pure Invariant Maintained</span>
+          </div>
+          <span id="timingText">Execution: &lt; 0.1ms</span>
+        </div>
+      </div>
+
+      <div class="page-nav">
+        <a href="examples.html">&larr; Back: Enterprise Cookbook</a>
+        <a href="../developer/index.html">Next: Developer Internals &rarr;</a>
+      </div>
+    </main>
+  </div>
+
+  <!-- SCRIPT FOR COMPILING & RESOLVING IN BROWSER -->
+  <script type="module">
+    import applyTemplate from "../../src/index.js";
+
+    const presets = {
+      card: {
+        data: {
+          cardClass: "card shadow-sm border-0 w-100",
+          headerClass: "card-header bg-transparent d-flex justify-content-between align-items-center",
+          title: "Account Overview",
+          badgeClass: "badge text-bg-success",
+          badgeText: "Active",
+          bodyClass: "card-body",
+          description: "All enterprise services operating within standard SLA parameters."
+        },
+        template: {
+          tagName: "div",
+          attributes: { class: "${cardClass}", "data-role": "status-card" },
+          children: [
+            {
+              tagName: "div",
+              attributes: { class: "${headerClass}" },
+              children: [
+                { tagName: "h5", attributes: { class: "mb-0" }, textContent: "${title}" },
+                { tagName: "span", attributes: { class: "${badgeClass}" }, textContent: "${badgeText}" }
+              ]
+            },
+            {
+              tagName: "div",
+              attributes: { class: "${bodyClass}" },
+              children: [
+                { tagName: "p", attributes: { class: "card-text text-muted mb-0" }, textContent: "${description}" }
+              ]
+            }
+          ]
+        }
+      },
+      formField: {
+        data: {
+          fieldId: "user-name",
+          label: "Full Name",
+          placeholder: "e.g. Marie Curie",
+          inputClass: "form-control form-control-lg",
+          isRequired: "true"
+        },
+        template: {
+          tagName: "div",
+          attributes: { class: "mb-3" },
+          children: [
+            {
+              tagName: "label",
+              attributes: { for: "${fieldId}", class: "form-label fw-bold" },
+              textContent: "${label}"
+            },
+            {
+              tagName: "input",
+              attributes: {
+                type: "text",
+                id: "${fieldId}",
+                class: "${inputClass}",
+                placeholder: "${placeholder}",
+                required: "${isRequired}"
+              }
+            }
+          ]
+        }
+      },
+      buttonGroup: {
+        data: {
+          saveClass: "btn btn-primary px-4",
+          cancelClass: "btn btn-outline-secondary",
+          saveLabel: "Submit Order",
+          cancelLabel: "Cancel"
+        },
+        template: {
+          tagName: "div",
+          attributes: { class: "d-flex gap-2 justify-content-end" },
+          children: [
+            { tagName: "button", attributes: { type: "submit", class: "${saveClass}" }, textContent: "${saveLabel}" },
+            { tagName: "button", attributes: { type: "button", class: "${cancelClass}" }, textContent: "${cancelLabel}" }
+          ]
+        }
+      },
+      countToken: {
+        data: {
+          widgetTitle: "Pending Approvals",
+          rowData: ["Claim #101", "Claim #102", "Claim #105", "Claim #109"]
+        },
+        template: {
+          tagName: "div",
+          attributes: { class: "d-flex align-items-center gap-2 p-2 border rounded" },
+          children: [
+            { tagName: "span", attributes: { class: "fw-semibold" }, textContent: "${widgetTitle}:" },
+            { tagName: "span", attributes: { class: "badge bg-danger rounded-pill" }, textContent: "${agg:count}" }
+          ]
+        }
+      },
+      rowValueToken: {
+        data: {
+          rowData: { userId: 442, role: "SuperAdmin", org: "KeshavSoft" }
+        },
+        template: "${rowValue}"
+      }
+    };
+
+    const dataEditor = document.getElementById("dataEditor");
+    const templateEditor = document.getElementById("templateEditor");
+    const resultEditor = document.getElementById("resultEditor");
+    const presetSelect = document.getElementById("presetSelect");
+    const runBtn = document.getElementById("runBtn");
+    const copyBtn = document.getElementById("copyBtn");
+    const statusDot = document.getElementById("statusDot");
+    const statusText = document.getElementById("statusText");
+    const timingText = document.getElementById("timingText");
+
+    function loadPreset(name) {
+      const preset = presets[name];
+      if (!preset) return;
+      dataEditor.value = JSON.stringify(preset.data, null, 2);
+      templateEditor.value = typeof preset.template === "string" 
+        ? preset.template 
+        : JSON.stringify(preset.template, null, 2);
+      executeTransform();
+    }
+
+    function executeTransform() {
+      try {
+        const rawData = JSON.parse(dataEditor.value);
+        let rawTemplate;
+        try {
+          rawTemplate = JSON.parse(templateEditor.value);
+        } catch {
+          rawTemplate = templateEditor.value;
+        }
+
+        const start = performance.now();
+        const result = applyTemplate(rawData, rawTemplate);
+        const duration = (performance.now() - start).toFixed(2);
+
+        resultEditor.value = typeof result === "string" 
+          ? result 
+          : JSON.stringify(result, null, 2);
+        
+        statusDot.className = "status-dot";
+        statusText.textContent = "Resolution Succeeded • Template Cloned";
+        timingText.textContent = `Execution: ${duration}ms`;
+      } catch (err) {
+        resultEditor.value = `Error: ${err.message}`;
+        statusDot.className = "status-dot error";
+        statusText.textContent = `Guard Violation: ${err.message}`;
+        timingText.textContent = "Failed";
+      }
+    }
+
+    presetSelect.addEventListener("change", (e) => loadPreset(e.target.value));
+    runBtn.addEventListener("click", executeTransform);
+    dataEditor.addEventListener("input", executeTransform);
+    templateEditor.addEventListener("input", executeTransform);
+
+    copyBtn.addEventListener("click", () => {
+      navigator.clipboard.writeText(resultEditor.value);
+      copyBtn.textContent = "✓ Copied!";
+      setTimeout(() => copyBtn.innerHTML = "<span>📋</span> Copy Output", 1500);
+    });
+
+    // Initialize with default preset
+    loadPreset("card");
+  </script>
+</body>
+</html>

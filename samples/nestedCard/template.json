@@ -1,0 +1,46 @@
+{
+  "tagName": "div",
+  "attributes": {
+    "class": "${cardClass}",
+    "data-role": "card-root"
+  },
+  "children": [
+    {
+      "tagName": "div",
+      "attributes": {
+        "class": "${headerClass}"
+      },
+      "children": [
+        {
+          "tagName": "h5",
+          "attributes": { "class": "card-title mb-0" },
+          "textContent": "${title}"
+        },
+        {
+          "tagName": "span",
+          "attributes": { "class": "${badgeClass}" },
+          "textContent": "${badgeText}"
+        }
+      ]
+    },
+    {
+      "tagName": "div",
+      "attributes": { "class": "${bodyClass}" },
+      "children": [
+        {
+          "tagName": "p",
+          "attributes": { "class": "card-text text-muted" },
+          "textContent": "${description}"
+        },
+        {
+          "tagName": "button",
+          "attributes": {
+            "type": "button",
+            "class": "${buttonClass}"
+          },
+          "textContent": "${buttonText}"
+        }
+      ]
+    }
+  ]
+}
