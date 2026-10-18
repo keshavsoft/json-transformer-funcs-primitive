@@ -391,7 +391,15 @@
 
   <!-- SCRIPT FOR COMPILING & RESOLVING IN BROWSER -->
   <script type="module">
-    import applyTemplate from "../../src/index.js";
+    let applyTemplate;
+    try {
+      const mod = await import("../../src/index.js");
+      applyTemplate = mod.default || mod.startFunc || mod;
+    } catch (err) {
+      console.warn("Local ../../src/index.js not found (GitHub Pages). Loading from CDN...", err);
+      const mod = await import("https://cdn.jsdelivr.net/npm/json-transformer-funcs-primitive@latest/+esm");
+      applyTemplate = mod.default || mod.startFunc || mod;
+    }
 
     const presets = {
       card: {
