@@ -1,6 +1,6 @@
 {
   "name": "json-transformer-funcs-primitive",
-  "version": "1.9.2",
+  "version": "1.9.3",
   "description": "Primitive template interpolation engine for json-transformer-funcs",
   "main": "./src/index.js",
   "module": "./src/index.js",
