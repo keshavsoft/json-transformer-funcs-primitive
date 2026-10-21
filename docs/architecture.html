@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Primitive Template Engine</title><meta name="description" content="Resolve one template against one data object to produce one JSON element tree.">
+<style>
+:root{color-scheme:light;--ink:#182235;--muted:#53647a;--line:#d9e1eb;--paper:#fff;--bg:#f4f7fb;--accent:#2457a7}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:980px;margin:0 auto;padding:28px 22px 64px}nav{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 22px}
+nav a,.link{display:inline-block;padding:8px 12px;border:1px solid var(--line);border-radius:9px;background:var(--paper);color:var(--accent);text-decoration:none}
+nav a[aria-current=page]{background:#e8effb;border-color:#b9cbed;font-weight:650}
+header,.panel{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:26px;margin:0 0 18px}
+.kicker{font-size:.78rem;letter-spacing:.13em;text-transform:uppercase;color:var(--accent);font-weight:750}
+h1{font-size:clamp(2rem,5vw,3.25rem);line-height:1.1;letter-spacing:-.035em;margin:.35em 0}
+h2{font-size:1.35rem;margin:.1em 0 .55em}p{margin:.45em 0 1em}.muted{color:var(--muted)}
+pre,code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#f2f5f9;border:1px solid var(--line);padding:14px;border-radius:10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}.tile{border:1px solid var(--line);border-radius:12px;padding:16px;background:#fff}
+.flow{display:flex;flex-wrap:wrap;align-items:center;gap:10px}.flow span{padding:10px 13px;border:1px solid var(--line);border-radius:9px;background:#fff}.arrow{color:var(--accent);font-weight:800}
+footer{padding:14px 2px;color:var(--muted);font-size:.9rem}
+@media(max-width:600px){main{padding:16px 12px 40px}header,.panel{padding:19px}}
+</style></head><body><main>
+<nav aria-label="JSON Transformer architecture"><a href="../../json-transformer-funcs/docs/index.html">Orchestrator</a><a href="../../json-transformer-funcs-primitive/docs/architecture.html" aria-current="page">Primitive</a><a href="../../json-transformer-funcs-one-dimension/docs/architecture.html">One dimension</a><a href="../../json-transformer-funcs-two-dimensions/docs/architecture.html">Two dimensions</a></nav>
+<header><div class="kicker">ENGINE 1 · ONE ELEMENT</div><h1>Primitive Template Engine</h1><p class="muted">Resolve one template against one data object to produce one JSON element tree.</p></header>
+
+<section class="panel"><h2>Responsibility</h2><p>The primitive engine resolves one template using one data object and returns a resolved JSON element tree. It fills dynamic values in <code>textContent</code>, <code>attributes</code>, and nested <code>children</code>; it does not iterate a source collection or assemble a table grid.</p></section>
+<section class="panel"><h2>Input → transformation → output</h2><div class="flow"><span>One data object</span><span class="arrow">+</span><span>One JSON template</span><span class="arrow">→</span><span>One resolved element tree</span></div>
+<pre>data:     { "label": "Save", "style": "primary" }
+template: { "tagName": "button",
+            "textContent": "${label}",
+            "attributes": { "class": "btn-${style}" } }
+result:   { "tagName": "button",
+            "textContent": "Save",
+            "attributes": { "class": "btn-primary" } }</pre>
+<p class="muted">Illustrative contract example; the engine's special tokens and recursive child handling are defined by its source implementation.</p></section>
+<section class="panel"><h2>Place in the family</h2><p>The collection and grid engines use this engine as their lower-level template resolver. The primitive has no need to know whether its output will become a table cell, option, button, or another element shape.</p><p><a class="link" href="../../json-transformer-funcs/docs/index.html">Return to the orchestrator story</a></p></section>
+
+<footer>JSON Transformer Funcs · Architecture guide · Describes the source version exported by each package entry point.</footer>
+</main></body></html>
