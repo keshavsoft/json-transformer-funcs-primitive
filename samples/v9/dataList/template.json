@@ -1,0 +1,7 @@
+{
+  "tagName": "option",
+  "textContent": "${columnName}",
+  "attributes": {
+    "value": "${columnName}"
+  }
+}
