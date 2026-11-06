@@ -3,7 +3,7 @@ import { models, activateTab } from "../monacoEditor/index.js";
 
 export const actions = {
     loadRaka: async () => {
-        const response = await fetch("./columns.json");
+        const response = await fetch("./column.json");
         const json = await response.json();
 
         models.columns.setValue(JSON.stringify(json, null, 2));
@@ -22,7 +22,7 @@ export const actions = {
         const columns = JSON.parse(models.columns.getValue());
         const template = JSON.parse(models.template.getValue());
 
-        const spec = loopWithIndividualTemplate(columns, template);
+        const spec = window.ks.transformer.funcs.primitive.applyTemplate(columns, template);
         console.log("spec---------- : ", spec);
 
         models.output.setValue(JSON.stringify(spec, null, 2));
