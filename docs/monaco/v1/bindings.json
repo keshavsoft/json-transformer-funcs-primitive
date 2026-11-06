@@ -1,0 +1,39 @@
+[
+  {
+    "event": "click",
+    "selector": "#rakaBtn",
+    "action": "loadRaka",
+    "narration": "Load and populate Raka columns JSON into editor"
+  },
+  {
+    "event": "click",
+    "selector": "#templateBtn",
+    "action": "loadTemplate",
+    "narration": "Load and populate template JSON into editor"
+  },
+  {
+    "event": "click",
+    "selector": "#buildBtn",
+    "action": "build",
+    "narration": "Transform columns with template and display output in editor"
+  },
+  {
+    "event": "click",
+    "selector": "#tabColumns",
+    "action": "showTabColumns",
+    "narration": "Switch editor model to columns.json"
+  },
+  {
+    "event": "click",
+    "selector": "#tabTemplate",
+    "action": "showTabTemplate",
+    "narration": "Switch editor model to template.json"
+  },
+  {
+    "event": "click",
+    "selector": "#tabOutput",
+    "action": "showTabOutput",
+    "narration": "Switch editor model to output.json"
+  }
+]
+
