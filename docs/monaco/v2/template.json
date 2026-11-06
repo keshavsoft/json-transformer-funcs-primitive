@@ -1,0 +1,8 @@
+{
+  "tagName": "option",
+  "textContent": "${columnName}",
+  "attributes": {
+    "value": "${columnName}"
+  },
+  "narration": "a tag from tags.json in https://github.com/keshavsoft/spec-repo"
+}
