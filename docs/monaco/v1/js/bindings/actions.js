@@ -1,5 +1,5 @@
 import { models, activateTab } from "../monacoEditor/index.js";
-import loopWithIndividualTemplate from "https://keshavsoft.github.io/json-transformer-funcs-one-dimension/dist/v9/min.js";
+// import loopWithIndividualTemplate from "https://keshavsoft.github.io/json-transformer-funcs-one-dimension/dist/v9/min.js";
 
 export const actions = {
     loadRaka: async () => {
