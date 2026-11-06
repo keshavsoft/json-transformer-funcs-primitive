@@ -18,6 +18,7 @@ Experience the rich documentation portal and interactive in-browser playground:
 * 🌳 [**Global Registry & Family Tree**](docs/user/global-registry.html) — Deep architectural tour of `window.ks` and the non-destructive registrant.
 * 🔤 [**Token Reference**](docs/user/tokens.html) — Complete guide to `${key}`, multi-tokens, `${agg:count}`, and `${rowValue}`.
 * 🍳 [**Enterprise Cookbook**](docs/user/examples.html) — Real-world recipes for cards, form fields, button toolbars, and microfrontends.
+* 🕹️ [**Monaco Workspaces Hub (v1-v3)**](docs/monaco/index.html) — Full-screen Monaco Editor workspaces with live spec-repo AST generation and declarative event bindings.
 * 🧪 [**Live Interactive Studio**](docs/user/playground.html) — In-browser playground with live JSON AST generation, real-time DOM rendering, and live `window.ks` tree inspector!
 * 🛠️ [**Developer Internals**](docs/developer/index.html) — v9 pipeline architecture, `registerGlobal/`, `meta.js`, and recursive AST cloning.
 
