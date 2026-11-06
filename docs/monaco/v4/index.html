@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Monaco Editor — JSON Transformer v3 (Powered by dom-primitive-bindings)</title>
+    <title>Monaco Editor — JSON Transformer v4 (Universal Declarative Tab Pattern)</title>
 
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.52.2/min/vs/editor/editor.main.min.css">
@@ -15,25 +15,27 @@
 
 <body>
     <div class="tab-bar">
+        <!-- Left: Universal Declarative Tabs (data-model mapped directly) -->
         <div class="editor-tabs" id="editorTabs">
-            <button class="tab-item active" id="tabColumns" type="button" title="View Columns JSON">
+            <button class="tab-item active" id="tabColumns" data-model="columns" type="button" title="View Columns JSON">
                 <i class="bi bi-columns text-info"></i>
                 <span>columns.json</span>
             </button>
-            <button class="tab-item" id="tabTemplate" type="button" title="View Template JSON">
+            <button class="tab-item" id="tabTemplate" data-model="template" type="button" title="View Template JSON">
                 <i class="bi bi-filetype-json text-warning"></i>
                 <span>template.json</span>
             </button>
-            <button class="tab-item" id="tabOutput" type="button" title="View Output JSON">
+            <button class="tab-item" id="tabOutput" data-model="output" type="button" title="View Output JSON">
                 <i class="bi bi-check2-circle text-success"></i>
                 <span>output.json</span>
             </button>
-            <button class="tab-item" id="specOutput" type="button" title="View Spec JSON">
+            <button class="tab-item" id="specOutput" data-model="spec" type="button" title="View Spec JSON">
                 <i class="bi bi-bag-fill text-danger"></i>
                 <span>spec.json</span>
             </button>
         </div>
 
+        <!-- Right: Action Buttons and Version Switcher -->
         <div class="tab-actions">
             <button class="action-btn" id="rakaBtn" type="button" title="Load Raka Columns JSON">
                 <i class="bi bi-columns"></i>
@@ -52,23 +54,25 @@
                 <span>spec</span>
             </button>
         
-            <!-- Version Switcher Menu -->
+                                    <!-- Version Switcher Menu -->
             <div class="dropdown ms-1">
                 <button class="btn btn-sm dropdown-toggle text-light d-flex align-items-center gap-1" type="button"
                     data-bs-toggle="dropdown" aria-expanded="false"
                     style="background-color: #2d2d2d; border: 1px solid #3e3e42; font-size: 12px; padding: 3px 10px; height: 26px; border-radius: 4px;">
                     <i class="bi bi-layers text-info"></i>
-                    <span class="fw-semibold">v3</span>
+                    <span class="fw-semibold">v4</span>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end shadow"
-                    style="z-index: 9999; min-width: 230px; font-size: 13px;">
+                    style="z-index: 9999; min-width: 240px; font-size: 13px;">
                     <li>
                         <h6 class="dropdown-header text-uppercase small text-secondary"
                             style="font-size: 10px; letter-spacing: 0.5px;">Monaco Workspaces</h6>
                     </li>
                     <li><a class="dropdown-item " href="../v1/index.html"><strong>v1</strong> <span class="text-secondary small ms-1">— Baseline 3-Tab</span></a></li>
                     <li><a class="dropdown-item " href="../v2/index.html"><strong>v2</strong> <span class="text-secondary small ms-1">— Spec-Repo &amp; Bag-Fill</span></a></li>
-                    <li><a class="dropdown-item active" href="./index.html"><i class="bi bi-check2 text-success me-1"></i><strong>v3</strong> <span class="small ms-1">Flagship</span></a></li>
+                    <li><a class="dropdown-item " href="../v3/index.html"><strong>v3</strong> <span class="text-secondary small ms-1">— Hardened 4-Tab</span></a></li>
+                    <li><a class="dropdown-item active" href="./index.html"><i class="bi bi-check2 text-success me-1"></i><strong>v4</strong> <span class="small ms-1">— Universal Pattern</span></a></li>
+                    <li><a class="dropdown-item " href="../v5/index.html"><strong>v5</strong> <span class="badge bg-success-subtle text-success small ms-1">50/50 Render Studio</span></a></li>
                     <li>
                         <hr class="dropdown-divider">
                     </li>

@@ -1,6 +1,12 @@
 [
   {
     "event": "click",
+    "selector": ".editor-tabs .tab-item",
+    "action": "switchTab",
+    "narration": "Universal tab switcher: activates clicked tab and mounts its Monaco model dynamically"
+  },
+  {
+    "event": "click",
     "selector": "#rakaBtn",
     "action": "loadRaka",
     "narration": "Load and populate Raka columns JSON into editor"
@@ -21,30 +27,6 @@
     "event": "click",
     "selector": "#specBtn",
     "action": "specJsonShow",
-    "narration": "show spec json from spec-repo in the editor"
-  },
-  {
-    "event": "click",
-    "selector": "#tabColumns",
-    "action": "showTabColumns",
-    "narration": "Switch editor model to columns.json"
-  },
-  {
-    "event": "click",
-    "selector": "#tabTemplate",
-    "action": "showTabTemplate",
-    "narration": "Switch editor model to template.json"
-  },
-  {
-    "event": "click",
-    "selector": "#tabOutput",
-    "action": "showTabOutput",
-    "narration": "Switch editor model to output.json"
-  },
-  {
-    "event": "click",
-    "selector": "#specOutput",
-    "action": "showSpecOutput",
-    "narration": "Switch editor model to specJson.json"
+    "narration": "Show spec json from spec-repo in editor"
   }
 ]

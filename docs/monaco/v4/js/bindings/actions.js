@@ -1,13 +1,24 @@
 import { models, activateTab } from "../monacoEditor/index.js";
-// import loopWithIndividualTemplate from "https://keshavsoft.github.io/json-transformer-funcs-one-dimension/dist/v9/min.js";
 
 export const actions = {
+    // 🎯 Universal Tab Switcher: handles clicks on ANY tab automatically
+    switchTab: (event, matchElement) => {
+        activateTab(matchElement);
+    },
+
+    // Legacy tab actions for backward compatibility
+    showTabColumns: () => activateTab("columns"),
+    showTabTemplate: () => activateTab("template"),
+    showTabOutput: () => activateTab("output"),
+    showSpecOutput: () => activateTab("spec"),
+
+    // 🚀 Action Triggers: populate data and activate target model in 1 call
     loadRaka: async () => {
         const response = await fetch("./column.json");
         const json = await response.json();
 
         models.columns.setValue(JSON.stringify(json, null, 2));
-        activateTab("tabColumns", models.columns);
+        activateTab("columns");
     },
 
     loadTemplate: async () => {
@@ -15,7 +26,7 @@ export const actions = {
         const json = await response.json();
 
         models.template.setValue(JSON.stringify(json, null, 2));
-        activateTab("tabTemplate", models.template);
+        activateTab("template");
     },
 
     build: () => {
@@ -25,30 +36,14 @@ export const actions = {
         const spec = window.ks.transformer.funcs.primitive.applyTemplate(columns, template);
 
         models.output.setValue(JSON.stringify(spec, null, 2));
-        activateTab("tabOutput", models.output);
+        activateTab("output");
     },
 
     specJsonShow: () => {
         const json = window.ks.specs.jsonFiles.spec;
 
-        models.specJson.setValue(JSON.stringify(json, null, 2));
-        activateTab("specOutput", models.specJson);
-    },
-
-    showTabColumns: () => {
-        activateTab("tabColumns", models.columns);
-    },
-
-    showTabTemplate: () => {
-        activateTab("tabTemplate", models.template);
-    },
-
-    showTabOutput: () => {
-        activateTab("tabOutput", models.output);
-    },
-
-    showSpecOutput: () => {
-        activateTab("specOutput", models.specJson);
+        models.spec.setValue(JSON.stringify(json, null, 2));
+        activateTab("spec");
     }
 };
 

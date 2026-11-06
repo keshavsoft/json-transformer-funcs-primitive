@@ -1,0 +1,26 @@
+[
+  {
+    "event": "click",
+    "selector": "#selectFileBtn",
+    "action": "openFileModal",
+    "narration": "Open modal popup to select a file"
+  },
+  {
+    "event": "click",
+    "selector": "#selectTemplateBtn",
+    "action": "selectTemplate",
+    "narration": "Load template.json into Monaco editor and close modal"
+  },
+  {
+    "event": "click",
+    "selector": "#selectColumnBtn",
+    "action": "selectColumn",
+    "narration": "Load column.json into Monaco editor and close modal"
+  },
+  {
+    "event": "click",
+    "selector": "#renderBtn",
+    "action": "render",
+    "narration": "Execute transformation and mount live DOM into right stage"
+  }
+]

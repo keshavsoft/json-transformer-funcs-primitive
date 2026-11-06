@@ -31,7 +31,7 @@
         <li><a href="user/tokens.html" class="nav-link">🔤 Token Reference</a></li>
         <li><a href="user/examples.html" class="nav-link">🍳 Enterprise Cookbook</a></li>
         <li><a href="user/playground.html" class="nav-link">🧪 Live Sandbox</a></li>
-        <li><a href="monaco/index.html" class="nav-link">🕹️ Monaco Workspaces <span class="nav-tag" style="background: rgba(56, 189, 248, 0.2); color: var(--accent);">v1-v3</span></a></li>
+        <li><a href="monaco/index.html" class="nav-link">🕹️ Monaco Workspaces <span class="nav-tag" style="background: rgba(56, 189, 248, 0.2); color: var(--accent);">v1-v5</span></a></li>
       </ul>
 
       <div class="nav-label">Architecture</div>
@@ -171,8 +171,63 @@
         </table>
       </div>
 
-      <!-- SECTION 3: QUICK PEEK -->
-      <h2>3. Quick Peek: How Simple It Is</h2>
+            <!-- SECTION 3: MONACO WORKSPACES -->
+      <h2>3. Interactive Monaco Workspaces (v1 &ndash; v5)</h2>
+      <p>
+        Experience the atomic transformation engine directly in the browser with full-screen, synchronized Monaco Editor workspaces powered by <code>dom-primitive-bindings</code>:
+      </p>
+
+      <div class="concept-grid">
+        <div class="concept-card" style="border-left: 3px solid var(--text-muted);">
+          <div class="concept-icon">📄</div>
+          <div class="concept-title">v1: Baseline Sandbox</div>
+          <div class="concept-role">3-Tab Modular Workspace</div>
+          <div class="concept-desc">
+            Core playground with <code>columns.json</code> (data), <code>template.json</code> (mold), and <code>output.json</code> (result).
+          </div>
+          <div style="margin-top: 12px;"><a href="monaco/v1/index.html" class="nav-link" style="color: var(--accent); font-weight: 600;">Launch v1 &rarr;</a></div>
+        </div>
+
+        <div class="concept-card" style="border-left: 3px solid var(--red);">
+          <div class="concept-icon">🛍️</div>
+          <div class="concept-title">v2: Spec-Repo</div>
+          <div class="concept-role">4-Tab Spec Extension</div>
+          <div class="concept-desc">
+            Integrates live <code>spec.json</code> (<i class="bi bi-bag-fill" style="color: var(--red);"></i>) from <code>@keshavsoft/spec-repo</code> with dynamic <code>[spec]</code> action.
+          </div>
+          <div style="margin-top: 12px;"><a href="monaco/v2/index.html" class="nav-link" style="color: var(--red); font-weight: 600;">Launch v2 &rarr;</a></div>
+        </div>
+
+        <div class="concept-card" style="border-left: 3px solid var(--indigo);">
+          <div class="concept-icon">⚙️</div>
+          <div class="concept-title">v3: Hardened 4-Tab</div>
+          <div class="concept-role">Production Lifecycle</div>
+          <div class="concept-desc">
+            Hardened environment with complete model lifecycle, fixed DOM layout, and verified container event delegation.
+          </div>
+          <div style="margin-top: 12px;"><a href="monaco/v3/index.html" class="nav-link" style="color: var(--indigo); font-weight: 600;">Launch v3 &rarr;</a></div>
+        </div>
+
+        <div class="concept-card" style="border-left: 3px solid var(--green); background: rgba(52, 211, 153, 0.05);">
+          <div class="concept-icon">🌟</div>
+          <div class="concept-title">v4: Universal Pattern</div>
+          <div class="concept-role">Flagship Architecture</div>
+          <div class="concept-desc">
+            The cakewalk design: dynamic array-free tab switcher, single delegated binding rule, and <code>data-model</code> mapping.
+          </div>
+          <div style="margin-top: 12px;"><a href="monaco/v4/index.html" class="nav-link" style="color: var(--green); font-weight: 700;">Launch v4 &rarr;</a></div>
+        </div>
+      </div>
+
+      <div style="margin: 20px 0 35px; text-align: center;">
+        <a href="monaco/index.html" style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 28px; background: linear-gradient(135deg, var(--accent-dark) 0%, var(--accent) 100%); color: #080c14; font-weight: 700; border-radius: 12px; text-decoration: none; box-shadow: 0 4px 16px rgba(56, 189, 248, 0.25);">
+          <span>🕹️ Open Monaco Workspaces Hub</span>
+          <span>&rarr;</span>
+        </a>
+      </div>
+
+      <!-- SECTION 4: QUICK PEEK -->
+      <h2>4. Quick Peek: How Simple It Is</h2>
       <p>Using native ES Modules:</p>
       <pre><code>import applyTemplate from "json-transformer-funcs-primitive";
 

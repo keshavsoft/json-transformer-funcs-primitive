@@ -49,20 +49,20 @@
     }
 
     .playground-card.active-card {
-      border: 2px solid #0284c7;
-      background: linear-gradient(180deg, #ffffff 0%, #f0f9ff 100%);
+      border: 2px solid #16a34a;
+      background: linear-gradient(180deg, #ffffff 0%, #f0fdf4 100%);
     }
 
     .version-badge-lg {
-      font-size: 2.2rem;
+      font-size: 2rem;
       font-weight: 800;
       line-height: 1;
       letter-spacing: -0.04em;
     }
 
     .feature-tag {
-      font-size: 0.75rem;
-      padding: 4px 10px;
+      font-size: 0.72rem;
+      padding: 3px 8px;
       border-radius: 20px;
       background: #f1f5f9;
       color: #475569;
@@ -78,7 +78,7 @@
 
   <!-- Hero Header -->
   <header class="hero-banner shadow-sm">
-    <div class="container" style="max-width: 960px;">
+    <div class="container" style="max-width: 1080px;">
       <div class="d-flex align-items-center justify-content-between flex-wrap gap-4">
         <div>
           <div class="d-inline-flex align-items-center gap-2 mb-2 px-3 py-1 rounded-pill bg-white bg-opacity-10 text-white border border-white border-opacity-20 small">
@@ -86,8 +86,8 @@
             <span>The Atomic Core &bull; json-transformer-funcs-primitive</span>
           </div>
           <h1 class="display-5 fw-bold mb-2">Monaco Workspaces Hub</h1>
-          <p class="lead mb-0 text-white text-opacity-75" style="max-width: 640px;">
-            Full-screen interactive Monaco Editor workspaces for experimenting with single-element template interpolation (The Data &amp; The Mold) powered by <code>dom-primitive-bindings</code>.
+          <p class="lead mb-0 text-white text-opacity-75" style="max-width: 680px;">
+            Full-screen interactive Monaco Editor workspaces for single-element template interpolation (The Data &amp; The Mold) powered by <code>dom-primitive-bindings</code>.
           </p>
         </div>
 
@@ -101,130 +101,134 @@
   </header>
 
   <!-- Main Content -->
-  <main class="container pb-5" style="max-width: 960px;">
+  <main class="container pb-5" style="max-width: 1080px;">
 
-    <!-- Intro Card -->
-    <div class="card shadow-sm border-0 p-4 mb-4">
-      <div class="d-flex align-items-start gap-3">
-        <div class="p-3 rounded-3 bg-primary bg-opacity-10 text-primary">
-          <i class="bi bi-layers fs-3"></i>
-        </div>
-        <div>
-          <h2 class="h5 fw-bold text-dark mb-1">Select a Monaco Playground Version</h2>
-          <p class="text-secondary small mb-0">
-            Each workspace below loads Monaco Editor models in synchronized tabs driven by <code>dom-primitive-bindings</code> single-listener container event delegation.
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Flagship Feature Card: v3 Workspace -->
-    <div class="card border-0 shadow-lg p-4 mb-4 text-white" style="background: linear-gradient(135deg, #080c14 0%, #0369a1 100%); border-radius: 16px;">
+    <!-- Flagship Feature Card: v5 Studio -->
+    <div class="card border-0 shadow-lg p-4 mb-4 text-white" style="background: linear-gradient(135deg, #090d16 0%, #064e3b 50%, #0284c7 100%); border-radius: 16px;">
       <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
         <div>
-          <div class="d-inline-flex align-items-center gap-2 mb-2 px-3 py-1 rounded-pill bg-info bg-opacity-25 text-info-emphasis border border-info border-opacity-30 small fw-bold">
+          <div class="d-inline-flex align-items-center gap-2 mb-2 px-3 py-1 rounded-pill bg-success bg-opacity-25 text-success-emphasis border border-success border-opacity-30 small fw-bold">
             <i class="bi bi-stars text-warning"></i>
-            <span class="text-white">Flagship Workspace &bull; Version 3</span>
+            <span class="text-white">New Flagship Studio &bull; Version 5</span>
           </div>
-          <h2 class="h3 fw-bold text-white mb-2">v3: Production Spec &amp; Template Workspace</h2>
-          <p class="text-white text-opacity-80 small mb-3" style="max-width: 680px;">
-            The complete 4-tab atomic playground: <code>columns.json</code> (The Data), <code>template.json</code> (The Mold), <code>output.json</code> (Resolved Node), and <code>spec.json</code> (Live Spec-Repo AST). Instant live compilation with verified <code>dom-primitive-bindings</code> single-listener delegation.
+          <h2 class="h3 fw-bold text-white mb-2">v5: 50/50 Dual-Pane Render Studio</h2>
+          <p class="text-white text-opacity-80 small mb-3" style="max-width: 740px;">
+            Vertical 50/50 split workspace: Monaco Editor on the left with a modal <strong>[Select File]</strong> picker for any <code>.json</code> or <code>.js</code> file, a center <strong>[Render]</strong> trigger, and the live DOM rendering stage on the right. Zero horizontal tab clutter, instant side-by-side visibility!
           </p>
           <div class="d-flex flex-wrap gap-2">
-            <span class="badge bg-white bg-opacity-10 text-white border border-white border-opacity-20"><i class="bi bi-columns text-info me-1"></i> columns.json</span>
-            <span class="badge bg-white bg-opacity-10 text-white border border-white border-opacity-20"><i class="bi bi-filetype-json text-warning me-1"></i> template.json</span>
-            <span class="badge bg-white bg-opacity-10 text-white border border-white border-opacity-20"><i class="bi bi-check2-circle text-success me-1"></i> output.json</span>
-            <span class="badge bg-white bg-opacity-10 text-white border border-white border-opacity-20"><i class="bi bi-bag-fill text-danger me-1"></i> spec.json</span>
+            <span class="badge bg-white bg-opacity-10 text-white border border-white border-opacity-20"><i class="bi bi-folder2-open text-info me-1"></i> Select File Modal</span>
+            <span class="badge bg-white bg-opacity-10 text-white border border-white border-opacity-20"><i class="bi bi-play-fill text-success me-1"></i> Center Render Action</span>
+            <span class="badge bg-white bg-opacity-10 text-white border border-white border-opacity-20"><i class="bi bi-display text-warning me-1"></i> Live DOM Stage</span>
+            <span class="badge bg-white bg-opacity-10 text-white border border-white border-opacity-20"><i class="bi bi-filetype-js text-light me-1"></i> JSON &amp; JS Support</span>
           </div>
         </div>
         <div>
-          <a href="./v3/index.html" class="btn btn-info text-dark fw-bold px-4 py-3 shadow-lg fs-6">
-            <i class="bi bi-play-circle-fill me-2 fs-5"></i> Launch v3 Playground
+          <a href="./v5/index.html" class="btn btn-success fw-bold px-4 py-3 shadow-lg fs-6">
+            <i class="bi bi-play-circle-fill me-2 fs-5"></i> Launch v5 Studio
           </a>
         </div>
       </div>
     </div>
 
-    <!-- The 3 Version Cards -->
-    <div class="row g-4 mb-5">
+    <!-- The 5 Version Cards Grid -->
+    <div class="row g-3 mb-5">
 
       <!-- Version 1 -->
-      <div class="col-md-4">
-        <div class="playground-card p-4">
-          <div class="d-flex align-items-center justify-content-between mb-3">
+      <div class="col-md-4 col-lg">
+        <div class="playground-card p-3">
+          <div class="d-flex align-items-center justify-content-between mb-2">
             <span class="badge bg-secondary">Baseline</span>
-            <span class="text-muted small">v1 Playground</span>
+            <span class="text-muted small">v1</span>
           </div>
           <div class="d-flex align-items-baseline gap-2 mb-2">
             <div class="version-badge-lg text-dark">v1</div>
-            <div class="fw-semibold text-secondary">Initial Workspace</div>
+            <div class="fw-semibold text-secondary small">3-Tab</div>
           </div>
-          <p class="small text-muted mb-3 flex-grow-1">
-            Core 3-tab Monaco sandbox demonstrating basic template interpolation with <code>applyTemplate</code>, <code>column.json</code>, <code>template.json</code>, and output generation.
+          <p class="small text-muted mb-3 flex-grow-1" style="font-size: 11px;">
+            Basic 3-tab Monaco sandbox demonstrating template interpolation with <code>applyTemplate</code>.
           </p>
-          <div class="mb-4">
-            <div class="d-flex flex-wrap gap-1">
-              <span class="feature-tag"><i class="bi bi-filetype-json text-primary"></i> 3 Models</span>
-              <span class="feature-tag"><i class="bi bi-lightning text-warning"></i> applyTemplate</span>
-              <span class="feature-tag"><i class="bi bi-diagram-2 text-success"></i> Bindings</span>
-            </div>
-          </div>
-          <a href="./v1/index.html" class="btn btn-outline-primary fw-bold w-100 py-2">
-            <i class="bi bi-play-circle me-1"></i> Launch v1
+          <a href="./v1/index.html" class="btn btn-outline-primary btn-sm fw-bold w-100 py-1">
+            Launch v1
           </a>
         </div>
       </div>
 
       <!-- Version 2 -->
-      <div class="col-md-4">
-        <div class="playground-card p-4">
-          <div class="d-flex align-items-center justify-content-between mb-3">
+      <div class="col-md-4 col-lg">
+        <div class="playground-card p-3">
+          <div class="d-flex align-items-center justify-content-between mb-2">
             <span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25">Spec-Repo</span>
-            <span class="text-muted small">v2 Playground</span>
+            <span class="text-muted small">v2</span>
           </div>
           <div class="d-flex align-items-baseline gap-2 mb-2">
             <div class="version-badge-lg text-danger">v2</div>
-            <div class="fw-semibold text-dark">Spec-Repo Extension</div>
+            <div class="fw-semibold text-dark small">Spec Tab</div>
           </div>
-          <p class="small text-secondary mb-3 flex-grow-1">
-            Enhanced workspace adding the 4th <code>spec.json</code> tab (<i class="bi bi-bag-fill text-danger"></i>) and dynamic <code>[spec]</code> action loading enterprise tag specs from <code>@keshavsoft/spec-repo</code>.
+          <p class="small text-secondary mb-3 flex-grow-1" style="font-size: 11px;">
+            Added 4th <code>spec.json</code> tab (<i class="bi bi-bag-fill text-danger"></i>) and dynamic <code>[spec]</code> action.
           </p>
-          <div class="mb-4">
-            <div class="d-flex flex-wrap gap-1">
-              <span class="feature-tag"><i class="bi bi-bag-fill text-danger"></i> spec.json</span>
-              <span class="feature-tag"><i class="bi bi-box-seam text-primary"></i> spec-repo</span>
-              <span class="feature-tag"><i class="bi bi-check2 text-success"></i> 4 Tabs</span>
-            </div>
-          </div>
-          <a href="./v2/index.html" class="btn btn-outline-danger fw-bold w-100 py-2">
-            <i class="bi bi-play-circle me-1"></i> Launch v2
+          <a href="./v2/index.html" class="btn btn-outline-danger btn-sm fw-bold w-100 py-1">
+            Launch v2
           </a>
         </div>
       </div>
 
       <!-- Version 3 -->
-      <div class="col-md-4">
-        <div class="playground-card active-card p-4">
-          <div class="d-flex align-items-center justify-content-between mb-3">
-            <span class="badge bg-primary">Latest Build</span>
-            <span class="text-primary fw-bold small"><i class="bi bi-star-fill text-warning me-1"></i> Current</span>
+      <div class="col-md-4 col-lg">
+        <div class="playground-card p-3">
+          <div class="d-flex align-items-center justify-content-between mb-2">
+            <span class="badge bg-primary">Hardened</span>
+            <span class="text-muted small">v3</span>
           </div>
           <div class="d-flex align-items-baseline gap-2 mb-2">
             <div class="version-badge-lg text-primary">v3</div>
-            <div class="fw-semibold text-dark">Production Flagship</div>
+            <div class="fw-semibold text-dark small">Full 4-Tab</div>
           </div>
-          <p class="small text-secondary mb-3 flex-grow-1">
-            Hardened workspace with full 4-tab model lifecycle, verified container delegation, instant resets for <code>[raka]</code>, <code>[template]</code>, <code>[spec]</code>, and <code>[build]</code>.
+          <p class="small text-secondary mb-3 flex-grow-1" style="font-size: 11px;">
+            Hardened 4-tab model lifecycle with fixed DOM layout and full CDN suite.
           </p>
-          <div class="mb-4">
-            <div class="d-flex flex-wrap gap-1">
-              <span class="feature-tag"><i class="bi bi-check2 text-success"></i> Complete 4-Tab</span>
-              <span class="feature-tag"><i class="bi bi-check2 text-success"></i> Hardened Bindings</span>
-              <span class="feature-tag"><i class="bi bi-check2 text-success"></i> Full CDN Suite</span>
-            </div>
+          <a href="./v3/index.html" class="btn btn-outline-primary btn-sm fw-bold w-100 py-1">
+            Launch v3
+          </a>
+        </div>
+      </div>
+
+      <!-- Version 4 -->
+      <div class="col-md-6 col-lg">
+        <div class="playground-card p-3">
+          <div class="d-flex align-items-center justify-content-between mb-2">
+            <span class="badge bg-info text-dark">Universal</span>
+            <span class="text-muted small">v4</span>
           </div>
-          <a href="./v3/index.html" class="btn btn-primary fw-bold w-100 py-2 shadow-sm">
-            <i class="bi bi-play-fill me-1"></i> Launch v3
+          <div class="d-flex align-items-baseline gap-2 mb-2">
+            <div class="version-badge-lg text-info">v4</div>
+            <div class="fw-semibold text-dark small">Tab Pattern</div>
+          </div>
+          <p class="small text-secondary mb-3 flex-grow-1" style="font-size: 11px;">
+            Dynamic array-free tab switcher with single delegated binding rule.
+          </p>
+          <a href="./v4/index.html" class="btn btn-outline-info btn-sm fw-bold w-100 py-1">
+            Launch v4
+          </a>
+        </div>
+      </div>
+
+      <!-- Version 5 -->
+      <div class="col-md-6 col-lg">
+        <div class="playground-card active-card p-3">
+          <div class="d-flex align-items-center justify-content-between mb-2">
+            <span class="badge bg-success">Latest</span>
+            <span class="text-success fw-bold small" style="font-size: 11px;"><i class="bi bi-star-fill text-warning me-1"></i> Studio</span>
+          </div>
+          <div class="d-flex align-items-baseline gap-2 mb-2">
+            <div class="version-badge-lg text-success">v5</div>
+            <div class="fw-semibold text-dark small">50/50 Studio</div>
+          </div>
+          <p class="small text-secondary mb-3 flex-grow-1" style="font-size: 11px;">
+            Vertical 50/50 split with file picker modal, center render action, and live stage.
+          </p>
+          <a href="./v5/index.html" class="btn btn-success btn-sm fw-bold w-100 py-1 shadow-sm">
+            Launch v5
           </a>
         </div>
       </div>
@@ -249,12 +253,14 @@
 
   <!-- Footer -->
   <footer class="border-top py-4 bg-white text-muted">
-    <div class="container d-flex align-items-center justify-content-between flex-wrap gap-2" style="max-width: 960px; font-size: 0.875rem;">
+    <div class="container d-flex align-items-center justify-content-between flex-wrap gap-2" style="max-width: 1080px; font-size: 0.875rem;">
       <div>
         <strong>json-transformer-funcs-primitive</strong> &bull; Built by <a href="https://github.com/keshavsoft" target="_blank" class="text-decoration-none text-dark fw-semibold">KeshavSoft</a>
       </div>
       <div class="d-flex gap-3">
-        <a href="./v3/index.html" class="text-decoration-none text-primary fw-semibold">Monaco v3</a>
+        <a href="./v5/index.html" class="text-decoration-none text-success fw-bold">Studio v5</a>
+        <a href="./v4/index.html" class="text-decoration-none text-muted">Monaco v4</a>
+        <a href="./v3/index.html" class="text-decoration-none text-muted">Monaco v3</a>
         <a href="./v2/index.html" class="text-decoration-none text-muted">Monaco v2</a>
         <a href="./v1/index.html" class="text-decoration-none text-muted">Monaco v1</a>
         <a href="../index.html" class="text-decoration-none text-muted">Docs Home</a>
@@ -265,4 +271,3 @@
 </body>
 
 </html>
-
