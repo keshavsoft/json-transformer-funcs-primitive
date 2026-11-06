@@ -15,6 +15,6 @@
     "event": "click",
     "selector": "#renderBtn",
     "action": "render",
-    "narration": "Compile and render current editor content into right preview stage"
+    "narration": "Compile and mount DOM into selected target element, then harvest all stage IDs"
   }
 ]

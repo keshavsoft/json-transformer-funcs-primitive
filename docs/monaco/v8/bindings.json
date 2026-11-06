@@ -1,0 +1,20 @@
+[
+  {
+    "event": "click",
+    "selector": "#selectFileBtn",
+    "action": "openSystemFilePicker",
+    "narration": "Open native OS system file dialog to choose any JSON file"
+  },
+  {
+    "event": "change",
+    "selector": "#fileInput",
+    "action": "handleFileSelection",
+    "narration": "Read selected local file from system and display content in Monaco Editor"
+  },
+  {
+    "event": "click",
+    "selector": "#renderBtn",
+    "action": "render",
+    "narration": "Compile and mount DOM into selected target element, then harvest all stage IDs"
+  }
+]

@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Monaco Editor — 50/50 Dual-Pane Render Studio (v6)</title>
+    <title>Monaco Editor — Composable Progressive Render Studio (v7)</title>
 
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.52.2/min/vs/editor/editor.main.min.css">
@@ -23,12 +23,23 @@
             </button>
             <div class="active-file-badge" title="Active Editor File">
                 <i class="bi bi-file-earmark-code text-info"></i>
-                <span id="activeFileName">template.json</span>
+                <span id="activeFileName">No file selected</span>
             </div>
         </div>
 
+        <!-- Center: Dynamic Target Container Dropdown + Render Trigger -->
         <div class="top-bar-center">
-            <button class="action-btn btn-render" id="renderBtn" type="button" title="Compile and Render into Right Stage">
+            <div class="d-flex align-items-center gap-2">
+                <label for="targetSelect" class="text-secondary small fw-semibold text-nowrap d-flex align-items-center gap-1 mb-0" style="font-size: 11px;">
+                    <i class="bi bi-bullseye text-warning"></i>
+                    <span>Target:</span>
+                </label>
+                <select id="targetSelect" class="form-select form-select-sm text-light border-secondary"
+                    style="background-color: #2d2d2d; font-size: 12px; height: 28px; padding-top: 2px; padding-bottom: 2px; min-width: 170px;">
+                    <option value="renderOutput" selected>#renderOutput (Root Stage)</option>
+                </select>
+            </div>
+            <button class="action-btn btn-render" id="renderBtn" type="button" title="Compile and Render into Selected Target ID">
                 <i class="bi bi-play-fill fs-6"></i>
                 <span>Render</span>
             </button>
@@ -41,7 +52,7 @@
                     data-bs-toggle="dropdown" aria-expanded="false"
                     style="background-color: #2d2d2d; border: 1px solid #3e3e42; font-size: 12px; padding: 3px 10px; height: 26px; border-radius: 4px;">
                     <i class="bi bi-layers text-info"></i>
-                    <span class="fw-semibold">v6</span>
+                    <span class="fw-semibold">v7</span>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end shadow"
                     style="z-index: 9999; min-width: 240px; font-size: 13px;">
@@ -54,7 +65,8 @@
                     <li><a class="dropdown-item" href="../v3/index.html"><strong>v3</strong> <span class="text-secondary small ms-1">— Hardened 4-Tab</span></a></li>
                     <li><a class="dropdown-item" href="../v4/index.html"><strong>v4</strong> <span class="text-secondary small ms-1">— Universal Pattern</span></a></li>
                     <li><a class="dropdown-item" href="../v5/index.html"><strong>v5</strong> <span class="text-secondary small ms-1">— 50/50 Render Studio</span></a></li>
-                    <li><a class="dropdown-item active" href="./index.html"><i class="bi bi-check2 text-success me-1"></i><strong>v6</strong> <span class="badge bg-success-subtle text-success small ms-1">System File Picker</span></a></li>
+                    <li><a class="dropdown-item" href="../v6/index.html"><strong>v6</strong> <span class="text-secondary small ms-1">— System File Picker</span></a></li>
+                    <li><a class="dropdown-item active" href="./index.html"><i class="bi bi-check2 text-success me-1"></i><strong>v7</strong> <span class="badge bg-success-subtle text-success small ms-1">Target ID Injection</span></a></li>
                     <li>
                         <hr class="dropdown-divider">
                     </li>
@@ -81,9 +93,10 @@
             </div>
             <div class="preview-body">
                 <div id="renderOutput" class="stage-card">
-                    <div class="text-center text-muted py-5">
+                    <div class="stage-placeholder text-center text-muted py-5">
                         <i class="bi bi-arrow-left-circle fs-2 text-primary d-block mb-2"></i>
                         <p class="mb-0 fw-medium">Select any file from your system, then click <strong>Render</strong> in the center.</p>
+                        <small class="text-secondary">Rendered IDs will automatically appear in the Target dropdown.</small>
                     </div>
                 </div>
             </div>

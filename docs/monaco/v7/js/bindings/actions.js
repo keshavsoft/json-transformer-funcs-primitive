@@ -23,12 +23,43 @@ function renderAstToDom(node) {
     return el;
 }
 
+function updateTargetDropdown() {
+    const stage = document.getElementById("renderOutput");
+    const targetSelect = document.getElementById("targetSelect");
+    if (!stage || !targetSelect) return;
+
+    const currentVal = targetSelect.value || "renderOutput";
+    const foundIds = new Set(["renderOutput"]);
+
+    targetSelect.innerHTML = `<option value="renderOutput">#renderOutput (Root Stage)</option>`;
+
+    // Only scan within the right-side renderOutput stage, not the whole DOM
+    const idNodes = stage.querySelectorAll("[id]");
+    idNodes.forEach((node) => {
+        const id = node.id;
+        if (id && !foundIds.has(id)) {
+            foundIds.add(id);
+            const opt = document.createElement("option");
+            opt.value = id;
+            opt.textContent = `#${id} (${node.tagName.toLowerCase()})`;
+            targetSelect.appendChild(opt);
+        }
+    });
+
+    // Retain previous target selection if still present
+    if (foundIds.has(currentVal)) {
+        targetSelect.value = currentVal;
+    } else {
+        targetSelect.value = "renderOutput";
+    }
+}
+
 export const actions = {
     // 📂 1. Open native system file picker
     openSystemFilePicker: () => {
         const fileInput = document.getElementById("fileInput");
         if (fileInput) {
-            fileInput.value = ""; // Reset so same file can be re-selected
+            fileInput.value = "";
             fileInput.click();
         }
     },
@@ -48,7 +79,7 @@ export const actions = {
         reader.readAsText(file);
     },
 
-    // ⚡ 3. Center Render Button: compile and mount into right stage
+    // ⚡ 3. Center Render Button: Mount into selected Target ID & Harvest IDs
     render: () => {
         const stage = document.getElementById("renderOutput");
         if (!stage || !editor) return;
@@ -57,26 +88,38 @@ export const actions = {
             const raw = editor.getValue();
             const parsed = JSON.parse(raw);
 
-            stage.innerHTML = "";
+            // Determine target container from dropdown
+            const targetSelect = document.getElementById("targetSelect");
+            const targetId = targetSelect?.value || "renderOutput";
+            const targetEl = document.getElementById(targetId) || stage;
 
-            // Check if it's a direct JSON-to-DOM AST node (has tagName)
-            if (parsed && typeof parsed === "object" && parsed.tagName) {
-                const domNode = renderAstToDom(parsed);
-                if (domNode) stage.appendChild(domNode);
-                return;
+            // Remove placeholder if targeting root for the first time
+            const placeholder = stage.querySelector(".stage-placeholder");
+            if (placeholder && targetEl === stage) {
+                stage.innerHTML = "";
             }
 
-            // Fallback for generic JSON structure
-            const card = document.createElement("div");
-            card.className = "alert alert-success border shadow-sm p-3 mb-0";
-            card.innerHTML = `
-                <div class="d-flex align-items-center gap-2 mb-2">
-                    <i class="bi bi-check-circle-fill text-success fs-5"></i>
-                    <strong>JSON Loaded Successfully</strong>
-                </div>
-                <pre class="bg-dark text-light p-3 rounded font-monospace small mb-0">${JSON.stringify(parsed, null, 2)}</pre>
-            `;
-            stage.appendChild(card);
+            // Render AST or fallback data card
+            if (parsed && typeof parsed === "object" && parsed.tagName) {
+                const domNode = renderAstToDom(parsed);
+                if (domNode) {
+                    targetEl.appendChild(domNode);
+                }
+            } else {
+                const card = document.createElement("div");
+                card.className = "alert alert-success border shadow-sm p-3 mb-2";
+                card.innerHTML = `
+                    <div class="d-flex align-items-center gap-2 mb-2">
+                        <i class="bi bi-check-circle-fill text-success fs-5"></i>
+                        <strong>JSON Mounted into #${targetId}</strong>
+                    </div>
+                    <pre class="bg-dark text-light p-3 rounded font-monospace small mb-0">${JSON.stringify(parsed, null, 2)}</pre>
+                `;
+                targetEl.appendChild(card);
+            }
+
+            // 🎯 Harvest all IDs inside the right render tab and populate the dropdown
+            updateTargetDropdown();
 
         } catch (err) {
             console.error("Render error:", err);

@@ -39,15 +39,8 @@ async function initMonaco() {
         return null;
     }
 
-    let initialText = "{\n  \n}";
-    try {
-        const res = await fetch("./template.json");
-        if (res.ok) initialText = await res.text();
-    } catch (e) {
-        // Fallback to empty JSON
-    }
-
-    const defaultModel = monaco.editor.createModel(initialText, "json");
+    // Blank initial state with zero predefined files
+    const defaultModel = monaco.editor.createModel("{\n  \n}", "json");
 
     editor = monaco.editor.create(container, {
         theme: "vs-dark",
@@ -61,7 +54,7 @@ async function initMonaco() {
 
     const label = document.getElementById("activeFileName");
     if (label) {
-        label.textContent = "template.json";
+        label.textContent = "No file selected";
     }
 
     return editor;
