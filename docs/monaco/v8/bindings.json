@@ -16,5 +16,11 @@
     "selector": "#renderBtn",
     "action": "render",
     "narration": "Compile and mount DOM into selected target element, then harvest all stage IDs"
+  },
+  {
+    "event": "click",
+    "selector": "#clearDomBtn",
+    "action": "clearDom",
+    "narration": "Clear rendered stage DOM and reset target dropdown back to root"
   }
 ]

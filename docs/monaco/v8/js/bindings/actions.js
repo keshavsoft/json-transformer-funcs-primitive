@@ -129,6 +129,27 @@ export const actions = {
                     <div class="mt-1">${err.message}</div>
                 </div>`;
         }
+    },
+
+    // 🗑️ 4. Clear DOM: Wipes only the right stage and resets dropdown back to root
+    clearDom: () => {
+        const stage = document.getElementById("renderOutput");
+        const targetSelect = document.getElementById("targetSelect");
+
+        if (stage) {
+            stage.innerHTML = `
+                <div class="stage-placeholder text-center text-muted py-5">
+                    <i class="bi bi-arrow-left-circle fs-2 text-primary d-block mb-2"></i>
+                    <p class="mb-0 fw-medium">Stage cleared. Select a file on the left and click <strong>Render</strong>.</p>
+                    <small class="text-secondary">Rendered IDs will automatically appear in the Target dropdown.</small>
+                </div>
+            `;
+        }
+
+        if (targetSelect) {
+            targetSelect.innerHTML = `<option value="renderOutput" selected>#renderOutput (Root Stage)</option>`;
+            targetSelect.value = "renderOutput";
+        }
     }
 };
 
