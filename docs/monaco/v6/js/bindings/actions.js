@@ -1,9 +1,4 @@
-import { editor, models, showFile } from "../monacoEditor/index.js";
-
-function getBootstrapModal() {
-    const el = document.getElementById("fileModal");
-    return el && window.bootstrap ? window.bootstrap.Modal.getOrCreateInstance(el) : null;
-}
+import { editor, setEditorContent } from "../monacoEditor/index.js";
 
 function renderAstToDom(node) {
     if (!node) return null;
@@ -29,52 +24,60 @@ function renderAstToDom(node) {
 }
 
 export const actions = {
-    // 📂 1. Open File Selection Modal
-    openFileModal: () => {
-        const modal = getBootstrapModal();
-        if (modal) modal.show();
+    // 📂 1. Open native system file picker
+    openSystemFilePicker: () => {
+        const fileInput = document.getElementById("fileInput");
+        if (fileInput) {
+            fileInput.value = ""; // Reset so same file can be re-selected
+            fileInput.click();
+        }
     },
 
-    // 📄 2. Select template.json
-    selectTemplate: () => {
-        showFile("template.json");
-        const modal = getBootstrapModal();
-        if (modal) modal.hide();
+    // 📄 2. Handle file selection from local system
+    handleFileSelection: (event) => {
+        const file = event.target.files?.[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const content = e.target?.result;
+            if (typeof content === "string") {
+                setEditorContent(content, file.name);
+            }
+        };
+        reader.readAsText(file);
     },
 
-    // 📄 3. Select column.json
-    selectColumn: () => {
-        showFile("column.json");
-        const modal = getBootstrapModal();
-        if (modal) modal.hide();
-    },
-
-    // ⚡ 4. Center Render Button: Compile and Mount DOM
+    // ⚡ 3. Center Render Button: compile and mount into right stage
     render: () => {
         const stage = document.getElementById("renderOutput");
-        if (!stage) return;
+        if (!stage || !editor) return;
 
         try {
-            const columnText = models["column.json"] ? models["column.json"].getValue() : "{}";
-            const templateText = models["template.json"] ? models["template.json"].getValue() : "{}";
-
-            const column = JSON.parse(columnText);
-            const template = JSON.parse(templateText);
-
-            let resolvedAST = null;
-            if (window.ks?.transformer?.funcs?.primitive?.applyTemplate) {
-                resolvedAST = window.ks.transformer.funcs.primitive.applyTemplate(column, template);
-            } else if (typeof window.applyTemplate === "function") {
-                resolvedAST = window.applyTemplate(column, template);
-            } else {
-                throw new Error("applyTemplate function not found in window.ks.transformer.funcs.primitive");
-            }
+            const raw = editor.getValue();
+            const parsed = JSON.parse(raw);
 
             stage.innerHTML = "";
-            const dom = renderAstToDom(resolvedAST);
-            if (dom) {
-                stage.appendChild(dom);
+
+            // Check if it's a direct JSON-to-DOM AST node (has tagName)
+            if (parsed && typeof parsed === "object" && parsed.tagName) {
+                const domNode = renderAstToDom(parsed);
+                if (domNode) stage.appendChild(domNode);
+                return;
             }
+
+            // Fallback for generic JSON structure
+            const card = document.createElement("div");
+            card.className = "alert alert-success border shadow-sm p-3 mb-0";
+            card.innerHTML = `
+                <div class="d-flex align-items-center gap-2 mb-2">
+                    <i class="bi bi-check-circle-fill text-success fs-5"></i>
+                    <strong>JSON Loaded Successfully</strong>
+                </div>
+                <pre class="bg-dark text-light p-3 rounded font-monospace small mb-0">${JSON.stringify(parsed, null, 2)}</pre>
+            `;
+            stage.appendChild(card);
+
         } catch (err) {
             console.error("Render error:", err);
             stage.innerHTML = `

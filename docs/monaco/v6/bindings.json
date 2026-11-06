@@ -2,25 +2,19 @@
   {
     "event": "click",
     "selector": "#selectFileBtn",
-    "action": "openFileModal",
-    "narration": "Open modal popup to select a file"
+    "action": "openSystemFilePicker",
+    "narration": "Open native OS system file dialog to choose any JSON file"
   },
   {
-    "event": "click",
-    "selector": "#selectTemplateBtn",
-    "action": "selectTemplate",
-    "narration": "Load template.json into Monaco editor and close modal"
-  },
-  {
-    "event": "click",
-    "selector": "#selectColumnBtn",
-    "action": "selectColumn",
-    "narration": "Load column.json into Monaco editor and close modal"
+    "event": "change",
+    "selector": "#fileInput",
+    "action": "handleFileSelection",
+    "narration": "Read selected local file from system and display content in Monaco Editor"
   },
   {
     "event": "click",
     "selector": "#renderBtn",
     "action": "render",
-    "narration": "Execute transformation and mount live DOM into right stage"
+    "narration": "Compile and render current editor content into right preview stage"
   }
 ]

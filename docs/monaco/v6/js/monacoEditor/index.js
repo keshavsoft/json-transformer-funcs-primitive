@@ -1,10 +1,5 @@
 let editor = null;
 
-const models = {
-    "template.json": null,
-    "column.json": null
-};
-
 function loadMonaco() {
     return new Promise((resolve, reject) => {
         if (window.monaco && window.monaco.editor) {
@@ -22,38 +17,21 @@ function loadMonaco() {
     });
 }
 
-function showFile(filename) {
-    if (editor && models[filename]) {
-        editor.setModel(models[filename]);
-        const label = document.getElementById("activeFileName");
-        if (label) {
-            label.textContent = filename;
-        }
+function setEditorContent(content, filename = "file.json") {
+    if (!editor || !window.monaco) return;
+
+    const language = filename.endsWith(".js") ? "javascript" : "json";
+    const model = window.monaco.editor.createModel(content, language);
+    editor.setModel(model);
+
+    const label = document.getElementById("activeFileName");
+    if (label) {
+        label.textContent = filename;
     }
 }
 
 async function initMonaco() {
     const monaco = await loadMonaco();
-
-    // Preload the two JSON files
-    try {
-        const [tplRes, colRes] = await Promise.all([
-            fetch("./template.json"),
-            fetch("./column.json")
-        ]);
-
-        const [tplText, colText] = await Promise.all([
-            tplRes.text(),
-            colRes.text()
-        ]);
-
-        models["template.json"] = monaco.editor.createModel(tplText, "json");
-        models["column.json"] = monaco.editor.createModel(colText, "json");
-    } catch (err) {
-        console.warn("Could not preload json files, creating empty models:", err);
-        models["template.json"] = models["template.json"] || monaco.editor.createModel("{}\n", "json");
-        models["column.json"] = models["column.json"] || monaco.editor.createModel("{}\n", "json");
-    }
 
     const container = document.getElementById("jsonEditor");
     if (!container) {
@@ -61,9 +39,19 @@ async function initMonaco() {
         return null;
     }
 
+    let initialText = "{\n  \n}";
+    try {
+        const res = await fetch("./template.json");
+        if (res.ok) initialText = await res.text();
+    } catch (e) {
+        // Fallback to empty JSON
+    }
+
+    const defaultModel = monaco.editor.createModel(initialText, "json");
+
     editor = monaco.editor.create(container, {
         theme: "vs-dark",
-        model: models["template.json"],
+        model: defaultModel,
         automaticLayout: true,
         tabSize: 2,
         fontSize: 13,
@@ -80,4 +68,4 @@ async function initMonaco() {
 }
 
 export default initMonaco;
-export { initMonaco, editor, models, showFile };
+export { initMonaco, editor, setEditorContent };
