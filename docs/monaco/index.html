@@ -103,38 +103,38 @@
   <!-- Main Content -->
   <main class="container pb-5" style="max-width: 1080px;">
 
-    <!-- Flagship Feature Card: v5 Studio -->
+    <!-- Flagship Feature Card: v8 Studio -->
     <div class="card border-0 shadow-lg p-4 mb-4 text-white" style="background: linear-gradient(135deg, #090d16 0%, #064e3b 50%, #0284c7 100%); border-radius: 16px;">
       <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
         <div>
           <div class="d-inline-flex align-items-center gap-2 mb-2 px-3 py-1 rounded-pill bg-success bg-opacity-25 text-success-emphasis border border-success border-opacity-30 small fw-bold">
             <i class="bi bi-stars text-warning"></i>
-            <span class="text-white">New Flagship Studio &bull; Version 5</span>
+            <span class="text-white">New Flagship Studio &bull; Version 8</span>
           </div>
-          <h2 class="h3 fw-bold text-white mb-2">v5: 50/50 Dual-Pane Render Studio</h2>
+          <h2 class="h3 fw-bold text-white mb-2">v8: Composable Progressive Render Studio</h2>
           <p class="text-white text-opacity-80 small mb-3" style="max-width: 740px;">
-            Vertical 50/50 split workspace: Monaco Editor on the left with a modal <strong>[Select File]</strong> picker for any <code>.json</code> or <code>.js</code> file, a center <strong>[Render]</strong> trigger, and the live DOM rendering stage on the right. Zero horizontal tab clutter, instant side-by-side visibility!
+            Vertical 50/50 split workspace: Monaco Editor with native file picker, center <strong>[Render]</strong> trigger with dynamic <strong>Target Container</strong> ID selection, interactive stage controls with <strong>[Clear DOM]</strong>, and live side-by-side rendering!
           </p>
           <div class="d-flex flex-wrap gap-2">
+            <span class="badge bg-white bg-opacity-10 text-white border border-white border-opacity-20"><i class="bi bi-bullseye text-warning me-1"></i> Target Dropdown</span>
+            <span class="badge bg-white bg-opacity-10 text-white border border-white border-opacity-20"><i class="bi bi-trash3 text-danger me-1"></i> Clear DOM Stage</span>
             <span class="badge bg-white bg-opacity-10 text-white border border-white border-opacity-20"><i class="bi bi-folder2-open text-info me-1"></i> Select File Modal</span>
             <span class="badge bg-white bg-opacity-10 text-white border border-white border-opacity-20"><i class="bi bi-play-fill text-success me-1"></i> Center Render Action</span>
-            <span class="badge bg-white bg-opacity-10 text-white border border-white border-opacity-20"><i class="bi bi-display text-warning me-1"></i> Live DOM Stage</span>
-            <span class="badge bg-white bg-opacity-10 text-white border border-white border-opacity-20"><i class="bi bi-filetype-js text-light me-1"></i> JSON &amp; JS Support</span>
           </div>
         </div>
         <div>
-          <a href="./v5/index.html" class="btn btn-success fw-bold px-4 py-3 shadow-lg fs-6">
-            <i class="bi bi-play-circle-fill me-2 fs-5"></i> Launch v5 Studio
+          <a href="./v8/index.html" class="btn btn-success fw-bold px-4 py-3 shadow-lg fs-6">
+            <i class="bi bi-play-circle-fill me-2 fs-5"></i> Launch v8 Studio
           </a>
         </div>
       </div>
     </div>
 
-    <!-- The 5 Version Cards Grid -->
-    <div class="row g-3 mb-5">
+    <!-- All 8 Version Workspaces Grid -->
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-3 mb-5">
 
       <!-- Version 1 -->
-      <div class="col-md-4 col-lg">
+      <div class="col">
         <div class="playground-card p-3">
           <div class="d-flex align-items-center justify-content-between mb-2">
             <span class="badge bg-secondary">Baseline</span>
@@ -147,14 +147,14 @@
           <p class="small text-muted mb-3 flex-grow-1" style="font-size: 11px;">
             Basic 3-tab Monaco sandbox demonstrating template interpolation with <code>applyTemplate</code>.
           </p>
-          <a href="./v1/index.html" class="btn btn-outline-primary btn-sm fw-bold w-100 py-1">
+          <a href="./v1/index.html" class="btn btn-outline-secondary btn-sm fw-bold w-100 py-1">
             Launch v1
           </a>
         </div>
       </div>
 
       <!-- Version 2 -->
-      <div class="col-md-4 col-lg">
+      <div class="col">
         <div class="playground-card p-3">
           <div class="d-flex align-items-center justify-content-between mb-2">
             <span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25">Spec-Repo</span>
@@ -174,7 +174,7 @@
       </div>
 
       <!-- Version 3 -->
-      <div class="col-md-4 col-lg">
+      <div class="col">
         <div class="playground-card p-3">
           <div class="d-flex align-items-center justify-content-between mb-2">
             <span class="badge bg-primary">Hardened</span>
@@ -194,7 +194,7 @@
       </div>
 
       <!-- Version 4 -->
-      <div class="col-md-6 col-lg">
+      <div class="col">
         <div class="playground-card p-3">
           <div class="d-flex align-items-center justify-content-between mb-2">
             <span class="badge bg-info text-dark">Universal</span>
@@ -214,21 +214,81 @@
       </div>
 
       <!-- Version 5 -->
-      <div class="col-md-6 col-lg">
+      <div class="col">
+        <div class="playground-card p-3">
+          <div class="d-flex align-items-center justify-content-between mb-2">
+            <span class="badge bg-dark">Split Studio</span>
+            <span class="text-muted small">v5</span>
+          </div>
+          <div class="d-flex align-items-baseline gap-2 mb-2">
+            <div class="version-badge-lg text-dark">v5</div>
+            <div class="fw-semibold text-dark small">50/50 Studio</div>
+          </div>
+          <p class="small text-secondary mb-3 flex-grow-1" style="font-size: 11px;">
+            Vertical 50/50 split workspace with file picker modal, center render action, and live stage.
+          </p>
+          <a href="./v5/index.html" class="btn btn-outline-dark btn-sm fw-bold w-100 py-1">
+            Launch v5
+          </a>
+        </div>
+      </div>
+
+      <!-- Version 6 -->
+      <div class="col">
+        <div class="playground-card p-3">
+          <div class="d-flex align-items-center justify-content-between mb-2">
+            <span class="badge bg-secondary text-light">System File</span>
+            <span class="text-muted small">v6</span>
+          </div>
+          <div class="d-flex align-items-baseline gap-2 mb-2">
+            <div class="version-badge-lg text-secondary">v6</div>
+            <div class="fw-semibold text-dark small">File Open</div>
+          </div>
+          <p class="small text-secondary mb-3 flex-grow-1" style="font-size: 11px;">
+            Direct native file picker integration with active file badge and streamlined UI.
+          </p>
+          <a href="./v6/index.html" class="btn btn-outline-secondary btn-sm fw-bold w-100 py-1">
+            Launch v6
+          </a>
+        </div>
+      </div>
+
+      <!-- Version 7 -->
+      <div class="col">
+        <div class="playground-card p-3">
+          <div class="d-flex align-items-center justify-content-between mb-2">
+            <span class="badge bg-warning text-dark">Composable</span>
+            <span class="text-muted small">v7</span>
+          </div>
+          <div class="d-flex align-items-baseline gap-2 mb-2">
+            <div class="version-badge-lg text-warning">v7</div>
+            <div class="fw-semibold text-dark small">Target Dropdown</div>
+          </div>
+          <p class="small text-secondary mb-3 flex-grow-1" style="font-size: 11px;">
+            Dynamic target container selector enabling progressive rendering into specific DOM IDs.
+          </p>
+          <a href="./v7/index.html" class="btn btn-outline-warning btn-sm fw-bold w-100 py-1">
+            Launch v7
+          </a>
+        </div>
+      </div>
+
+      <!-- Version 8 -->
+      <div class="col">
         <div class="playground-card active-card p-3">
           <div class="d-flex align-items-center justify-content-between mb-2">
             <span class="badge bg-success">Latest</span>
             <span class="text-success fw-bold small" style="font-size: 11px;"><i class="bi bi-star-fill text-warning me-1"></i> Studio</span>
           </div>
           <div class="d-flex align-items-baseline gap-2 mb-2">
-            <div class="version-badge-lg text-success">v5</div>
-            <div class="fw-semibold text-dark small">50/50 Studio</div>
+            <div class="version-badge-lg text-success">v8</div>
+            <div class="fw-semibold text-dark small">Clear DOM</div>
           </div>
           <p class="small text-secondary mb-3 flex-grow-1" style="font-size: 11px;">
-            Vertical 50/50 split with file picker modal, center render action, and live stage.
+            Progressive render studio with auto Target ID discovery and dedicated Clear DOM control.
           </p>
-          <a href="./v5/index.html" class="btn btn-success btn-sm fw-bold w-100 py-1 shadow-sm">
-            Launch v5
+          <a href="./v8/index.html" class="btn btn-success btn-sm fw-bold w-100 py-1 shadow-sm">
+            Launch v8
           </a>
         </div>
       </div>
@@ -257,8 +317,11 @@
       <div>
         <strong>json-transformer-funcs-primitive</strong> &bull; Built by <a href="https://github.com/keshavsoft" target="_blank" class="text-decoration-none text-dark fw-semibold">KeshavSoft</a>
       </div>
-      <div class="d-flex gap-3">
-        <a href="./v5/index.html" class="text-decoration-none text-success fw-bold">Studio v5</a>
+      <div class="d-flex flex-wrap gap-3">
+        <a href="./v8/index.html" class="text-decoration-none text-success fw-bold">Studio v8</a>
+        <a href="./v7/index.html" class="text-decoration-none text-muted">Monaco v7</a>
+        <a href="./v6/index.html" class="text-decoration-none text-muted">Monaco v6</a>
+        <a href="./v5/index.html" class="text-decoration-none text-muted">Monaco v5</a>
         <a href="./v4/index.html" class="text-decoration-none text-muted">Monaco v4</a>
         <a href="./v3/index.html" class="text-decoration-none text-muted">Monaco v3</a>
         <a href="./v2/index.html" class="text-decoration-none text-muted">Monaco v2</a>
