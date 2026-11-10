@@ -2,23 +2,38 @@
 
 > **The Atom.** One data object + one JSON-to-DOM template = one fully-resolved, immutable element node.
 
-[![npm](https://img.shields.io/npm/v/json-transformer-funcs-primitive)](https://www.npmjs.com/package/json-transformer-funcs-primitive)
+[![npm version](https://img.shields.io/npm/v/json-transformer-funcs-primitive.svg?color=cb3837&logo=npm)](https://www.npmjs.com/package/json-transformer-funcs-primitive)
+[![Documentation Portal](https://img.shields.io/badge/Docs-GitHub%20Pages-blue.svg)](https://keshavsoft.github.io/json-transformer-funcs-primitive/)
+[![Monaco Studio v8](https://img.shields.io/badge/Monaco%20Studio-v8%20Live-brightgreen.svg)](https://keshavsoft.github.io/json-transformer-funcs-primitive/monaco/v8/)
 [![license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![dependencies](https://img.shields.io/badge/dependencies-0-brightgreen.svg)]()
 [![tests](https://img.shields.io/badge/tests-passing-brightgreen.svg)]()
 
 ---
 
+## 🌐 Quick Links & Interactive Demos
+
+| Hub / Resource | Direct Link | Description |
+|---|---|---|
+| 📦 **npm Package** | [`npm/json-transformer-funcs-primitive`](https://www.npmjs.com/package/json-transformer-funcs-primitive) | Official npm registry package |
+| 📖 **Documentation Portal** | [Online Portal](https://keshavsoft.github.io/json-transformer-funcs-primitive/) / [`docs/`](docs/index.html) | Complete documentation, guides, and tokens |
+| 🕹️ **Monaco Workspaces Hub** | [Monaco Hub (v1–v8)](https://keshavsoft.github.io/json-transformer-funcs-primitive/monaco/) / [`docs/monaco/`](docs/monaco/index.html) | Full-screen interactive Monaco editors |
+| 🚀 **Flagship Studio v8** | [Launch Studio v8](https://keshavsoft.github.io/json-transformer-funcs-primitive/monaco/v8/) | Progressive target injection with Clear DOM |
+| 🧪 **Live Sandbox & Tree** | [Live Sandbox](https://keshavsoft.github.io/json-transformer-funcs-primitive/user/playground.html) / [`docs/playground`](docs/user/playground.html) | In-browser AST generator and DOM renderer |
+
+---
+
 ## 📚 Extreme Documentation Portal
 
-Experience the rich documentation portal and interactive in-browser playground:
+Experience the rich documentation portal and interactive in-browser playgrounds:
 
-* 📖 [**The Story & Ecosystem**](docs/index.html) — Mental model of The Data & The Mold.
+* 📖 [**The Story & Ecosystem**](docs/index.html) ([Live](https://keshavsoft.github.io/json-transformer-funcs-primitive/)) — Mental model of The Data & The Mold.
+* 🕹️ [**Monaco Workspaces Hub (v1–v8)**](docs/monaco/index.html) ([Live Hub](https://keshavsoft.github.io/json-transformer-funcs-primitive/monaco/)) — 8 full-screen Monaco Editor workspaces with live spec-repo AST generation, native file open, and progressive target injection.
+* 🚀 [**Monaco Studio v8 (Latest Flagship)**](docs/monaco/v8/index.html) ([Live v8](https://keshavsoft.github.io/json-transformer-funcs-primitive/monaco/v8/)) — Composable Progressive Render Studio with target container selector and Clear DOM.
 * 📘 [**User Guide**](docs/user/index.html) — Contract signatures, guards, and parameter conventions.
 * 🌳 [**Global Registry & Family Tree**](docs/user/global-registry.html) — Deep architectural tour of `window.ks` and the non-destructive registrant.
 * 🔤 [**Token Reference**](docs/user/tokens.html) — Complete guide to `${key}`, multi-tokens, `${agg:count}`, and `${rowValue}`.
 * 🍳 [**Enterprise Cookbook**](docs/user/examples.html) — Real-world recipes for cards, form fields, button toolbars, and microfrontends.
-* 🕹️ [**Monaco Workspaces Hub (v1-v3)**](docs/monaco/index.html) — Full-screen Monaco Editor workspaces with live spec-repo AST generation and declarative event bindings.
 * 🧪 [**Live Interactive Studio**](docs/user/playground.html) — In-browser playground with live JSON AST generation, real-time DOM rendering, and live `window.ks` tree inspector!
 * 🛠️ [**Developer Internals**](docs/developer/index.html) — v9 pipeline architecture, `registerGlobal/`, `meta.js`, and recursive AST cloning.
 
